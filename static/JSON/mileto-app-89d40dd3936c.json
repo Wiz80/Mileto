@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "mileto-app",
+  "private_key_id": "89d40dd3936c1e89c4ab80af6a4e31c93867b3a9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCYltdvJ/kiQkRv\nUt0aHI1I57iq8KYc8amZu0jOYfAFq/KkbBY2brgHnDl/J4DMTQUhg15uLwGX24L9\n6ORL4Vg169KKKqLw70T1X/pGfh1MouYZO5VKw7Vs4ZJ7Onw2pgCmnWjULq/HTPUB\nO4J4zJAD+B4qNYI4a9lwCRPaYoD8qoM0S/LE9Q6ZbNg73EyY/f9qAPis9wH7zchh\nlQw5SiX/OZE+T8O4TB8Y5/HmUyVH9G/AAXKFkgngDm6USLfaF87/1RnfI03e1gby\n2RkdFkPw8erhZHHvkzOaNbXLI8b8VCzwkzAVzgfwIHfIGED3WO6vnWGgbKHAezq5\nFrCaBXTrAgMBAAECggEAAyzxRKI+CGBjrZ0GXL9z+BMmeZw/gMIaWvvJHjTVYQpw\nJsuldkvwlYWPs5DXy9vdSJJdoG8zzWLBA6K/2Y2euQr0dNhCHHLstvfHE1KwyAI3\neRZcQYcrWx3VeOFBnR69GO3ITp4k6o6av+qEPE2MwIbLercy9uFu6YRIcjBZnQ7k\nVcqPWxtaFIDQHiIBuh0j5osYIusw3Y5mFxNfiqZBkl5AdIzoHQ272FSN1N3H0c1S\n8grtGggtzpzFU8/TAt077sw0r4W+aIHKsvBWX8S7dLHBFQhWyujAZ8mzZ/qTkX8s\n/ErKPEp8ocGp6UhivQNmO3iUx4/0zxwn3rUR4S9KbQKBgQDV3gxGFpZsjxGzR2Q/\n3ax7jKisof2db4nHDKDsMUafnknmDBk1EOcPQvBLkplUKJmB/7lsbxXCWVaJ2Svj\n2GZTKCcw6Hae3rIBO0YTPcU2EnJuU8eY27Ne99tiCG2XdlQrjft5T5n6vhtNoPJj\nGgZjdrVAsSvTKJa5dmwoxldq1wKBgQC2plvWya2ZfWpmc9+EEM1C1KfPLzHRRZ+J\nTev+nfJT8J0nGDSX28WrdlEwOWiQw7HOBI1U/BlRdQD+d6nSZQOaDkXt0dL30UXT\nUI8xBdSzSBNgoFdDkWEJ24/Nngn2+bAuYdPiatjTlUGljhTgSTju84gJe6mfVmll\n8EwVeLo4DQKBgAnCs46zUzQrJ2SmOnYLuOZ+megfEIMR5xjVg7aj3RRF1huQq8nX\nNqRkqrDYRPUpUTA0qpK/Ux/mkeOCrNUeODVNXNSHl3pSsY8K1HzmUczQ9LYCTta0\nGDCaYUHNHqtN9DN0rGhx8JYX/QkC8m0BcA80CLumGljtvktCk1cdDjpLAoGAHZj/\nsOKlmwXTxB5qzf/bA0VqnAxNyle57ooOAAigSDHphXhKrYETmyFlLqde5naPzY63\nSFpB0A1hx9qkTk/IMaK2ej9SLI5g/klDqvIC8bpwSWwyN+TLEMnfl7ZQbxEvF5UK\nvNoLoN3C8Y0AnQfAjhgwpzi+1+8szTQPYDtcEdECgYAKO2eR6o1ccW8nAdN1AB0a\njmcjTgyT+Qh/Lu8TVsaf3xHbaSJ/QdsK5/CL8Cg6PI4HIogKoVSnKeW2FVZqDt7E\nju1imet8tUHhxzSTJTZL0YOUzTzAASuhNMREcLPcPNABGNAlXPROJ0OVmVHlQI4Z\nBoiXuSM9X49d4D3Ax0VnQQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "mileto-admin@mileto-app.iam.gserviceaccount.com",
+  "client_id": "117445540945710437648",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mileto-admin%40mileto-app.iam.gserviceaccount.com"
+}

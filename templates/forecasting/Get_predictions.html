@@ -1,0 +1,64 @@
+{% extends "header.html" %}
+{% load static %}
+{% block content %}
+<script>
+    function ChangeOnModel(){
+        const selected_option = document.getElementById('select-model');
+        const SVR_box = document.getElementById('SVR_model');
+        if (selected_option.value === '1') {
+            SVR_box.style.display = 'block';
+        } else {
+            SVR_box.style.display = 'none';
+        }
+    }
+</script>
+<div class="content_data_page">
+    <div class="row">
+        <div class="col">
+            <h1>Obtener predicciones</h1>
+            <div class="predictions">
+                <form action="{% url 'predictions'%}" method = "POST">
+                    {% csrf_token %}
+                    {% if error %}
+                    <div class="option_div warning">
+                        <span>{{error}}</span>
+                    </div>  
+                    {% endif %}
+                    <div class="option_div">
+                        <label class="w-100">Seleccione el modelo de predicción</label>
+                        <select name = "fuente" class="form-select" id="select-model" onchange="ChangeOnModel();">
+                            <option value="1">Support Vector Regression</option>
+                            <option value="2">Artificial Neural Networks</option>
+                        </select>
+                    </div>
+                    <div class="option_model" id="SVR_model">
+                        <label class="w-100">Seleccione el Mercado de comercialización</label>
+                        <select name = "fuente" class="form-select" id="select-MC">
+                            <option value="1">MC-Cali</option>
+                        </select>
+                        <p  class="text-center" style="font-weight: bold;">¿No encuentras el mercado de comercialización para modelo seleccionado?</p>
+                        <p  class="text-center" style="font-weight: bold;">Entrenalo <a href="#">aquí</a></p>
+                    </div>
+                    <div class="buttons">
+                        <div class="row">
+                            <div class="col d-flex justify-content-center">
+                                <img src="{% static 'images/download.svg'%}" alt="download">
+                            </div>
+                            <div class="col d-flex justify-content-center">
+                                <button type="submit">
+                                    <img src="{% static 'images/play.svg'%}" alt="play">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col">
+            <div class="predictions">
+                <h2>HOLA MUNDO</h2>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

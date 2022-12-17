@@ -1,0 +1,42 @@
+{% extends "header.html" %}
+{% load static %}
+{% block content %}
+<div class="content_data_page">
+    <div class="data_page">    
+        <h2>Añadir información a la base de datos</h2>
+        <div class="form-data">
+            <form action="{% url 'data'%}" method = "POST">
+                {% csrf_token %}
+                {% if error %}
+                <div class="option_div warning">
+                    <span>{{error}}</span>
+                </div>  
+                {% endif %}
+                <div class="option_div">
+                    <label class="w-100">Seleccione la fuente de datos</label>
+                    <select name = "fuente" class="form-select" aria-label="Default select example">
+                        <option value="1">XM: Datos de demanda de energía anteriores</option>
+                        <option value="2">Climatología</option>
+                        <option value="3">Pronóstico del clima</option>
+                    </select>
+                </div>
+                <div class="option_div">
+                    <label class="w-100">Establezca desde que fecha quiere recolectar los datos</label>
+                    <input class="w-100" type="date" name="Fecha_inicio" placeholder = "Fecha de inicio">
+                </div>
+                <div class="option_div">
+                    <label class="w-100">Establezca hasta que fecha quiere recolectar los datos</label>
+                    <input class="w-100" type="date" name="Fecha_cierre" placeholder = "Fecha de inicio">
+                </div>
+                <label class="w-100" for="fileSelect">Spreadsheet</label> 
+                <input id="fileSelect" name="file_spread_sheet" mutiple type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                <div class="button_div">
+                    <button type="submit">
+                        <img src="{% static 'images/add.svg'%}" alt="mas">
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="70" height="70" viewBox="0 0 70 70">
+  <defs>
+    <radialGradient id="radial-gradient" cx="0.5" cy="0.5" r="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#e4ff1a"/>
+      <stop offset="1" stop-color="#affc41"/>
+    </radialGradient>
+  </defs>
+  <g id="mileto_logo2" transform="translate(-183 281)">
+    <rect id="Rectángulo_62" data-name="Rectángulo 62" width="70" height="70" rx="19" transform="translate(183 -281)"/>
+    <g id="mileto_logo" transform="translate(-44.696 7.051)">
+      <g id="Grupo_16131" data-name="Grupo 16131" transform="matrix(0.914, -0.407, 0.407, 0.914, 125.325, 82.509)">
+        <g id="Grupo_2" data-name="Grupo 2">
+          <rect id="Rectángulo_53" data-name="Rectángulo 53" width="22" height="8" transform="matrix(0.407, -0.914, 0.914, 0.407, 240.474, -231.11)" fill="url(#radial-gradient)"/>
+          <rect id="Rectángulo_54" data-name="Rectángulo 54" width="22" height="8" transform="matrix(-0.914, -0.407, 0.407, -0.914, 266.266, -234.952)" fill="url(#radial-gradient)"/>
+          <path id="Trazado_30" data-name="Trazado 30" d="M4.027,0H22V8H4.027l-2.6-4.048Z" transform="matrix(-0.914, -0.407, 0.407, -0.914, 289.816, -239.792)" fill="url(#radial-gradient)"/>
+          <rect id="Rectángulo_56" data-name="Rectángulo 56" width="22" height="8" transform="matrix(-0.407, 0.914, -0.914, -0.407, 276.128, -254.643)" fill="url(#radial-gradient)"/>
+        </g>
+        <g id="Grupo_1" data-name="Grupo 1">
+          <rect id="Rectángulo_52" data-name="Rectángulo 52" width="36" height="8" transform="matrix(0.407, -0.914, 0.914, 0.407, 227.684, -236.805)" fill="url(#radial-gradient)"/>
+          <path id="Trazado_29" data-name="Trazado 29" d="M0,0H31.061l3.2,4.084L31.061,8H0Z" transform="matrix(0.914, 0.407, -0.407, 0.914, 266.362, -274.863)" fill="url(#radial-gradient)"/>
+          <path id="Trazado_28" data-name="Trazado 28" d="M0,0H22.5V8H0Z" transform="matrix(0.407, -0.914, 0.914, 0.407, 251.863, -256.69)" fill="url(#radial-gradient)"/>
+          <rect id="Rectángulo_59" data-name="Rectángulo 59" width="22" height="8" transform="matrix(-0.914, -0.407, 0.407, -0.914, 259.171, -253.436)" fill="url(#radial-gradient)"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

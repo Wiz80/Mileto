@@ -1,0 +1,32 @@
+:root{
+    --b: #3F67E9;
+    --b1: #1492E6;
+    --r: #FF3341;
+    --g1: #E4FF1A;
+    --g2: #89FC00;
+    --g3: #AFFC41;
+    --w1: #FFFFFF;
+    --w2: #F8F9FA;
+    --w3: RGB(246,246,246,80);
+    --gr1: #E9ECEF;
+    --gr2: #DEE2E6;
+    --gr3: #929394;
+    --gr4: #b4b4b4;
+    --bl1: #212529;
+    --bl2: #484F56;
+    --small: 6px;
+    --medi-small: 11px;
+    --medium: 13px;
+    --large: 15px;
+    --f1: 'SF Pro Display', sans-serif;
+}
+
+.predictions{
+    width: 80%;
+}
+
+.buttons img{
+    width: 24px;
+}
+
+

@@ -1,0 +1,85 @@
+:root{
+    --b: #3F67E9;
+    --r: #FF3341;
+    --b1: #30D6E2;
+    --b2: #25ACA8;
+    --w1: #FFFFFF;
+    --w2: #F8F9FA;
+    --w3: RGB(246,246,246,80);
+    --gr1: #E9ECEF;
+    --gr2: #DEE2E6;
+    --gr3: #929394;
+    --gr4: #b4b4b4;
+    --bl1: #212529;
+    --bl2: #484F56;
+    --small: 6px;
+    --medi-small: 11px;
+    --medium: 13px;
+    --large: 15px;
+    --f1: 'SF Pro Display', sans-serif;
+}
+
+.nav_bar{
+    padding: 0;
+    width: 6%;
+    height: 100%; /* Full height */
+    position: fixed; /* Make it stick, even on scroll */
+    overflow: auto; /* Enable scrolling if the sidenav has too much content */
+    border-right: 1px solid var(--gr2);
+}
+
+.nav_bar_options{
+    margin-left: 6%;
+    width: 8%;
+    height: 100%; /* Full height */
+    position: fixed; /* Make it stick, even on scroll */
+    overflow: auto; /* Enable scrolling if the sidenav has too much content */
+}
+
+.nav_bar_options.to_small{
+    font-size: 10px;
+}
+
+
+.nav_bar_options .collapse .list-group.data{
+    margin-top: 280%;
+}
+
+
+.logo{
+    padding-top: 50%;
+    padding-left: 25%;
+    height: 15%;
+}
+
+.logo img{
+    width:40px;
+}
+
+.home{
+    padding-top: 100%;
+    height: 70%;
+}
+
+.home .btn-group-vertical{
+    width: 100%;
+}
+
+.home .btn-group-vertical button{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.home .btn-group-vertical button img{
+    width:20px;
+    margin-left: 20px;
+}
+
+.user_login{
+    padding-left: 28%;
+    height: 15%;
+}
+
+.user_login img{
+    width:35px;
+}
