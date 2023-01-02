@@ -8,8 +8,10 @@ from predictions.models import Demand_Data
 from predictions.train_model import Train, Test
 from predictions.get_predictors import Weather
 #Save model
-from predictions.save_files import upload_to_GD
-
+import sys
+sys.path.insert(1, 'C:\\Users\\pc\\Desktop\\Python\\Tesis\\Mileto\\predictions\\')
+from Google_Cloud import *
+from Google_Cloud.save_files import Google_Cloud_Drive
 
 lista_weather_variables = [
     "temperature_2m",
@@ -106,7 +108,11 @@ def train_model(request):
             results = {'time': np.array(Weather_data_test['time']) ,'Target_values': np.array(Target_values),'Target_predictions': np.array(Target_predictions)}
             results = pd.DataFrame(results)
             results.to_csv('./static/models/results.csv', encoding='utf-8', index=False)
-            #upload_to_GD
+            googleDriveInstance = Google_Cloud_Drive()
+            #To_delete (folder) - google drive
+            id_folder = "1Iu2CF4PPLc7vxD6b88Y7WZHVmFkiVes3"
+            googleDriveInstance.subir_archivo('./static/models/results.csv', id_folder)
+
 
             return render(request, 'forecasting/train.html', 
                           {'score': Score,
