@@ -39,6 +39,7 @@ class Train:
         Data_model['Hour'] = Hour
         Data_model = pd.DataFrame(Data_model)
         
+        #Obtener datos de demanda desde la base de datos
         data_raw = Demand_Data.objects.filter(UCP=MC, Variable="Demanda_Real")
         data_raw = pd.DataFrame.from_records(data_raw.values())
         #calcular predictores de demanda de energía 
@@ -80,6 +81,7 @@ class Train:
         test_time = list(Weather_data_test['time'].dt.date)
 
         Train_idx = Data_model_train[(Weather_data['time'].dt.date >= train_time[0]) & (Weather_data['time'].dt.date <= train_time[-1])].index
+
         Test_idx = Data_model_train[(Weather_data['time'].dt.date >= test_time[0]) & (Weather_data['time'].dt.date <= test_time[-1])].index
         
         Train_predictors = Data_predictors.loc[Train_idx]
@@ -91,12 +93,11 @@ class Train:
         return Train_predictors, Train_target, Test_predictors, Test_target
 
 
-    def training_SVR(self, Train_predictors, Train_target, kernel, C, epsilon, gamma):
+    def training_SVR(self, Train_predictors, Train_target, kernel, C, epsilon, gamma, Test_predictors):
 
         #SVR
         SVR_forecast_model = SVR(kernel=kernel, C=C, epsilon=epsilon, gamma=gamma)
         SVR_forecast_model.fit(Train_predictors, Train_target)
-        
 
         return SVR_forecast_model
 
@@ -110,8 +111,9 @@ class Train:
         
         Train_predictors, Train_target, Test_predictors, Test_target = self.data_preparation(Data_model_train, Weather_data, Weather_data_train, Weather_data_test)
         
-        SVR_forecast_model = self.training_SVR(Train_predictors, Train_target, kernel, C, epsilon, gamma)
+        SVR_forecast_model = self.training_SVR(Train_predictors, Train_target, kernel, C, epsilon, gamma, Test_predictors)
           
+
         return SVR_forecast_model, Data_model, Test_predictors, Test_target
 
 

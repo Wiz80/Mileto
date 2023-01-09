@@ -94,13 +94,18 @@ def train_model(request):
                 pass
               
         #Obtener datos metereológicos
+        #Train
         Weather_data_train = Weather(start_train_date, end_train_date, latitude, longitud).get_weather_data(weather_chosen)
+        #Test
         Weather_data_test = Weather(start_test_date, end_test_date, latitude, longitud).get_weather_data(weather_chosen)
         
         if model == 'SVR':
+            #Entrenar modelo SVR
             SVR_forecast_model, Data_model, Test_predictors, Target_values = Train().build_SVR(Weather_data_train, Weather_data_test, Demand_chosen, MC, kernel, C, epsilon, gamma)
 
+            #Test SVR
             Target_predictions, Score, Mape, Mae, Mse = Test().testing(SVR_forecast_model, Test_predictors, Target_values)
+
             #Demanda predecida no normalizada
             Target_predictions = Target_predictions*max(Data_model['Demand'])
             Target_values = Target_values*max(Data_model['Demand'])

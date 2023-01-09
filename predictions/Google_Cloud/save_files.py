@@ -118,3 +118,18 @@ class Google_Cloud_Drive():
                             'parentLink': 'https://www.googleapis.com/drive/v2/files/' + id_folder}]
         archivo.Upload(param={'supportsTeamDrives': True})
         #Al mover un archivo este conserva el id
+    
+    """
+    def read_file( id_file ) :
+        metadata = dict( id = id_file )
+        
+        google_file = google_drive.CreateFile( metadata = metadata )
+
+        google_file.GetContentFile( filename = id_file )
+
+        content_bytes = google_file.content ; # BytesIO
+
+        string_data = content_bytes.read().decode( 'utf-8' )
+
+        return string_data
+    """

@@ -50,10 +50,12 @@ class Day_predictors:
     def __init__(self, weather_data):
         self.weather_data = weather_data
 
+    #array para día de la semana
     def create_DayOfTheWeek(self):
         DayOfTheWeek = np.array(pd.to_datetime(self.weather_data['time']).dt.dayofweek)
         return DayOfTheWeek
     
+    #array para días festivos
     def create_fest_array(self, DayOfTheWeek):
         fds_fest = []
         for idx, day in enumerate(self.weather_data['time']):
@@ -70,6 +72,7 @@ class Day_predictors:
                 fds_fest.append(0)
         return np.array(fds_fest)
     
+    #array para obtener la hora 
     def get_hour(self):
         return np.array(self.weather_data['time'].dt.hour)
 
@@ -79,6 +82,7 @@ class Demand_predictors:
     def __init__(self, Data):
         self.Data = Data
 
+    #Demanda por horas
     def get_demand(self, Date, Demand_raw):
         self.Data.insert(len(self.Data.columns),"Demand", None)
         Demand = self.Data['Demand']
@@ -93,6 +97,7 @@ class Demand_predictors:
                 Demand.loc[get_data_in_date.index] = demand_in_date[:len(get_data_in_date)]
         return Demand
 
+    #Demanda promedio de las últimas 24 horas
     def get_demand_24_HRS(self):
         Avg_Demand_24 = np.array(self.Data['Demand'])
         for idx in range(len(self.Data['Demand'])):
@@ -103,12 +108,14 @@ class Demand_predictors:
             Avg_Demand_24[idx] = sum(data_24)/len(data_24)
         return Avg_Demand_24
 
+    #Demanda de la hora coincidente con un día de anterioridad
     def get_demand_1d_bef(self):
         Demand_1d_bef = np.array(self.Data['Demand'])
         for idx in range(24, len(self.Data['Demand'])):
             Demand_1d_bef[idx] = self.Data['Demand'].loc[idx-24]
         return Demand_1d_bef
     
+    #Demanda de la hora coincidente con 7 días de anterioridad
     def get_demand_7d_bef(self):
         Demand_7d_bef = np.array(self.Data['Demand'])
         for idx in range(24*7, len(self.Data['Demand'])):

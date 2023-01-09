@@ -209,16 +209,17 @@
             </div>
         </div>
     </form>
+    <script type="text/javascript" src="{% static 'js/draw_time_series.js' %}"></script>
     <script>
         function call_results(){
             const results_container = document.getElementById('results');
             results_container.style.display = 'block';
-            //time_series("{{file_name}}", "{{inicio}}", "{{final}}", "{{min}}", "{{max}}")
-            time_series_rela("{{file_name}}", "{{inicio}}", "{{final}}", "{{min}}", "{{max}}")
+            time_series("{{file_name}}", "{{inicio}}", "{{final}}", "{{min}}", "{{max}}")
+            //time_series_rela("{{file_name}}", "{{inicio}}", "{{final}}", "{{min}}", "{{max}}")
+            //time_series_example();
         }
     </script>
     <div class="row" id="results" style="display: none;">
-        <script type="text/javascript" src="{% static 'js/draw_time_series.js' %}"></script>
         <h1>Resultados de entrenamiento</h1>
         <div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
         <p>{{MAPE}}</p>
