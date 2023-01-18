@@ -8,10 +8,10 @@ from predictions.models import Demand_Data
 from predictions.train_model import Train, Test
 from predictions.get_predictors import Weather
 #Save model
-import sys
-sys.path.insert(1, 'C:\\Users\\pc\\Desktop\\Python\\Tesis\\Mileto\\predictions\\')
-from Google_Cloud import *
-from Google_Cloud.save_files import Google_Cloud_Drive
+#import sys
+#sys.path.insert(1, 'C:\\Users\\pc\\Desktop\\Python\\Tesis\\Mileto\\predictions\\')
+from predictions.Google_Cloud import *
+from predictions.Google_Cloud.save_files import Google_Cloud_Drive
 
 lista_weather_variables = [
     "temperature_2m",
@@ -103,8 +103,10 @@ def train_model(request):
             #Entrenar modelo SVR
             SVR_forecast_model, Data_model, Test_predictors, Target_values = Train().build_SVR(Weather_data_train, Weather_data_test, Demand_chosen, MC, kernel, C, epsilon, gamma)
 
+            SVR_forecast_model = pickle.load(open('static/models/SVR_model.sav', 'rb'))
             #Test SVR
             Target_predictions, Score, Mape, Mae, Mse = Test().testing(SVR_forecast_model, Test_predictors, Target_values)
+            
 
             #Demanda predecida no normalizada
             Target_predictions = Target_predictions*max(Data_model['Demand'])
