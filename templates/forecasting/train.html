@@ -2,233 +2,268 @@
 {% load static %}
 {% block content %}
 <div class="content_data_page">
-    <form action="{% url 'train'%}" method="POST">
-        {% csrf_token %}
-        <div class="row">
-            <h1>Entrenar modelo</h1>
-            <div class="col-5">
-                <div class="option_div">
-                    <h3>Mercado de comercialización</h3>
-                    <select class="w-50" name="mc">
-                        <option value="MC-Cali">MC-Cali</option>
-                        <option value="2">ANN</option>
-                    </select>
-                </div>
-                <div class="option_div">
-                    <h3>Modelo de entrenamiento</h3>
-                    <select class="w-50", name = "model">
-                        <option value="SVR">SVR</option>
-                        <option value="ANN">ANN</option>
-                      </select>
-                </div>
-                <div class="option_div">
-                    <h3>Datos de fechas</h3>
-                    {% if error %}
-                        <div class="option_div warning">
-                            <span>{{error}}</span>
-                        </div>  
-                    {% endif %}
-                    <label class="w-100">Seleccione la fecha de inicio de entrenamiento</label>
-                    <input class="w-100" type="date" id="start_train" name="train_start" />
-                    <label class="w-100">Seleccione la fecha final de entrenamiento</label>
-                    <input class="w-100" type="date" id="train_finish" name="train_finish" />
-                    <label class="w-100">Seleccione la fecha de inicio de testeo</label>
-                    <input class="w-100" type="date" id="start_test" name="test_start" />
-                    <label class="w-100">Seleccione la fecha final de testeo</label>
-                    <input class="w-100" type="date" id="finish" name="test_finish" />
-                </div>
-                <div class="option_div">
-                    <h3>Seleccione coordenadas</h3>
-                    <label class="w-100">Latitud</label>
-                    <input class="w-50" type="number" step="0.01" name="latitud"/>
-                    <label class="w-100">Longitud</label>
-                    <input class="w-50" type="number" step="0.01" name="longitud"/>
-                </div>
-                <div class="option_div">
-                    <h3>Hiperparametros del modelo <a href="#">SVR</a></h3>
-                    <div class="row">
-                        <div class="col">
-                            <label class="w-100">&epsilon;</label>
-                            <input class="w-50" type="number" step="0.01" name="eps"/>
-                            <label class="w-100">&gamma;</label>
-                            <input class="w-50" type="number" step="0.01" name="gam"/>
-                        </div>
-                        <div class="col">
-                            <label class="w-100" for="kernel">Kernel</label>
-                            <select class="w-50" name="kernel">
-                                <option value="rbf">rbf (default)</option>
-                                <option value="linear">linear</option>
-                                <option value="poly">poly</option>
-                                <option value="sigmoid">sigmoid</option>
-                                <option value="precomputed">precomputed</option>
+    <div class="formulario">
+        <form action="{% url 'train'%}" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <h1>Entrenar modelo</h1>
+                <div class="col">
+                    <div class="option_div">
+                        <h3>Mercado de comercialización</h3>
+                        <select class="w-50" name="mc">
+                            <option value="MC-Cali">MC-Cali</option>
+                            <option value="2">ANN</option>
+                        </select>
+                    </div>
+                    <div class="option_div">
+                        <h3>Modelo de entrenamiento</h3>
+                        <select class="w-50", name = "model">
+                            <option value="SVR">SVR</option>
+                            <option value="ANN">ANN</option>
                             </select>
-                            <label class="w-100">C</label>
-                            <input class="w-50" type="number" name="C"/>
-                        </div> 
+                    </div>
+                    <div class="option_div">
+                        <h3>Datos de fechas</h3>
+                        {% if error %}
+                            <div class="option_div warning">
+                                <span>{{error}}</span>
+                            </div>  
+                        {% endif %}
+                        <label class="w-100">Seleccione la fecha de inicio de entrenamiento</label>
+                        <input class="w-100" type="date" id="start_train" name="train_start" />
+                        <label class="w-100">Seleccione la fecha final de entrenamiento</label>
+                        <input class="w-100" type="date" id="train_finish" name="train_finish" />
+                        <label class="w-100">Seleccione la fecha de inicio de testeo</label>
+                        <input class="w-100" type="date" id="start_test" name="test_start" />
+                        <label class="w-100">Seleccione la fecha final de testeo</label>
+                        <input class="w-100" type="date" id="finish" name="test_finish" />
                     </div>
                 </div>
-            </div>
-            <div class="col" style="padding-left: 5%;">
-                <div class="option_div">
-                    <h3>Predictores de demanda</h3>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="24_HRS" checked id="24-HRS"/>
-                        <label for="24_HRS" class="form-check-label">
-                            Promedio de demanda de 24 horas anteriores
-                        </label>
+                <div class="col" style="margin-left: 2%;">
+                    <div class="option_div">
+                        <h3>Seleccione coordenadas</h3>
+                        <label class="w-100">Latitud</label>
+                        <input class="w-50" type="number" step="0.01" name="latitud"/>
+                        <label class="w-100">Longitud</label>
+                        <input class="w-50" type="number" step="0.01" name="longitud"/>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="1d_bef" checked />
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Demanda de la hora coincidente con el día anterior
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="7d_bef"checked />
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Demanda de la hora coincidente de hace una semana
-                        </label>
-                    </div>
-                </div>
-                <div class="option_div">
-                    <h3>Variables metereológicas por hora</h3>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="temperature_2m"/>
-                                <label class="form-check-label">
-                                    Temperatura (2 m)
-                                </label>
+                    <div class="option_div">
+                        <h3>Hiperparametros del modelo <a href="#">SVR</a></h3>
+                        <div class="row">
+                            <div class="col">
+                                <label class="w-100">&epsilon;</label>
+                                <input class="w-50" type="number" step="0.01" name="eps"/>
+                                <label class="w-100">&gamma;</label>
+                                <input class="w-50" type="number" step="0.01" name="gam"/>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="relativehumidity_2m"/>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Humedad relativa (2 m)
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="dewpoint_2m"/>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Punto de rocío (2 m)
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="apparent_temperature"/>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Temperatura aparente
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="pressure_msl"/>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Presión a nivel del mar 
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="surface_pressure"/>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Presión superficial
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="precipitation" />
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Precipitación (lluvia + chubascos + nieve) 
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="rain" />
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Lluvia (lluvia + chubascos) 
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="snowfall"/>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Nevada 
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="cloudcover"/>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Nubosidad total
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="cloudcover_high"/>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Nubosidad alta
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="cloudcover_mid"/>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Nubosidad media
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="cloudcover_low"/>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Nubosidad baja
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="shortwave_radiation"/>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Radiación solar de onda corta
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="direct_radiation"/>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Radiación solar directa
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="diffuse_radiation"/>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Radiación solar difusa
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="direct_normal_irradiance"/>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Irradiancia normal directa (DNI) 
-                                </label>
-                            </div>
+                            <div class="col">
+                                <label class="w-100" for="kernel">Kernel</label>
+                                <select class="w-50" name="kernel">
+                                    <option value="rbf">rbf (default)</option>
+                                    <option value="linear">linear</option>
+                                    <option value="poly">poly</option>
+                                    <option value="sigmoid">sigmoid</option>
+                                    <option value="precomputed">precomputed</option>
+                                </select>
+                                <label class="w-100">C</label>
+                                <input class="w-50" type="number" name="C"/>
+                            </div> 
                         </div>
                     </div>
                 </div>
-                <div class="button_entrenar text-center">
-                    <button type="submit">
-                        <img src="{% static 'images/entrenar_1.png'%}" alt="mas" />
-                    </button>
+                <div class="col">
+                    <div class="option_div">
+                        <h3>Predictores de demanda</h3>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="24_HRS" checked id="24-HRS"/>
+                            <label for="24_HRS" class="form-check-label">
+                                Promedio de demanda de 24 horas anteriores
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="1d_bef" checked />
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Demanda de la hora coincidente con el día anterior
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="7d_bef"checked />
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Demanda de la hora coincidente de hace una semana
+                            </label>
+                        </div>
+                    </div>
+                    <div class="option_div">
+                        <h3>Variables metereológicas por hora</h3>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="temperature_2m"/>
+                                    <label class="form-check-label">
+                                        Temperatura (2 m)
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="relativehumidity_2m"/>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Humedad relativa (2 m)
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="dewpoint_2m"/>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Punto de rocío (2 m)
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="apparent_temperature"/>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Temperatura aparente
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="pressure_msl"/>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Presión a nivel del mar 
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="surface_pressure"/>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Presión superficial
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="precipitation" />
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Precipitación (lluvia + chubascos + nieve) 
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="rain" />
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Lluvia (lluvia + chubascos) 
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="snowfall"/>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Nevada 
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="cloudcover"/>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Nubosidad total
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="cloudcover_high"/>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Nubosidad alta
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="cloudcover_mid"/>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Nubosidad media
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="cloudcover_low"/>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Nubosidad baja
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="shortwave_radiation"/>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Radiación solar de onda corta
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="direct_radiation"/>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Radiación solar directa
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="diffuse_radiation"/>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Radiación solar difusa
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="direct_normal_irradiance"/>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Irradiancia normal directa (DNI) 
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="button_entrenar text-center">
+                        <button type="submit">
+                            <img src="{% static 'images/entrenar_1.png'%}" alt="mas" />
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
     <script type="text/javascript" src="{% static 'js/draw_time_series.js' %}"></script>
+    {% with inicio=inicio final=final min=min max=max%}
     <script>
         function call_results(){
             const results_container = document.getElementById('results');
             results_container.style.display = 'block';
-            time_series("{{file_name}}", "{{inicio}}", "{{final}}", "{{min}}", "{{max}}")
-            //time_series_rela("{{file_name}}", "{{inicio}}", "{{final}}", "{{min}}", "{{max}}")
-            //time_series_example();
+            var data = JSON.parse('{{ data|escapejs }}');
+            plotTimeSeries(data, '{{min}}', '{{max}}', '{{inicio}}', '{{final}}')
         }
     </script>
+    {% endwith %}
     <div class="row" id="results" style="display: none;">
         <h1>Resultados de entrenamiento</h1>
-        <div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
-        <p>{{MAPE}}</p>
-        <p>{{MSE}}</p>
-        <p>{{MAE}}</p>
-        <p>{{score}}</p>
+        <div id='plot'><!-- Plotly chart will be drawn inside this DIV --></div>
+        <table class="table metrics w-50">
+            <thead class="tablehead">
+                <tr>
+                    <th>Métricas</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="tg-bgtg">MAPE</td>
+                <td class="tg-bgtg">{{MAPE}}</td>
+                </tr>
+                <tr>
+                <td class="tg-bgtg">MSE</td>
+                <td class="tg-bgtg">{{MSE}}</td>
+                </tr>
+                <tr>
+                <td class="tg-bgtg">MAE</td>
+                <td class="tg-bgtg">{{MAE}}</td>
+                </tr>
+                <tr>
+                <td class="tg-bgtg">Score</td>
+                <td class="tg-bgtg">{{score}}</td>
+                </tr>
+            </tbody>
+        </table>     
+        <div class="row">
+            <div class="col">
+
+            </div>
+            <div class="col">
+
+            </div>
+        </div>
     </div>
     
-    {% if file_name %}
+    {% if data %}
         <script>
             call_results()
         </script>

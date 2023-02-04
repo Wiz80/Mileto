@@ -41,7 +41,12 @@ class Google_Cloud_Drive():
         archivo['title'] = ruta_archivo.split("/")[-1]
         archivo.SetContentFile(ruta_archivo)
         archivo.Upload()
-
+    
+    def sobreescribir_archivo(self, id_file, ruta_archivo, file_name):
+        credenciales = self.login()
+        archivo = credenciales.CreateFile({'id': id_file, 'title': file_name}) 
+        archivo.SetContentFile(ruta_archivo)
+        archivo.Upload()
 
     # DESCARGAR UN ARCHIVO DE DRIVE POR ID
     def bajar_archivo_por_id(self, id_drive,ruta_descarga):

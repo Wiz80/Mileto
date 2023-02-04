@@ -5,7 +5,7 @@ from django.forms.models import model_to_dict
 # Create your views here.
 
 def index(request):
-    return render(request, 'data_colection/data.html')
+    return render(request, 'home.html')
 
 
 # Create your views here.

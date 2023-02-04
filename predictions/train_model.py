@@ -19,7 +19,6 @@ from sklearn.metrics import mean_squared_error as MSE
 
 
 
-
 class Train:
 
     def get_data_to_train(self, weather_data, Demand_chosen_pred, MC):
@@ -60,7 +59,7 @@ class Train:
 
         
         Data_model_train = Data_model.copy()
-
+    
         #Normalización de datos
         for column in Data_model_train.columns:
             if column == 'Demand':
@@ -68,7 +67,6 @@ class Train:
             else:
                 Data_model_train[column] = 2*((Data_model[column] - min(Data_model[column]))/(max(Data_model[column])-min(Data_model[column])))-1
         
-
         return Data_model_train, Data_model
 
 
@@ -89,17 +87,23 @@ class Train:
 
         Test_predictors = Data_predictors.loc[Test_idx]
         Test_target = Data_target.loc[Test_idx]
-
+        print(Test_target)
         return Train_predictors, Train_target, Test_predictors, Test_target
 
 
-    def training_SVR(self, Train_predictors, Train_target, kernel, C, epsilon, gamma, Test_predictors):
+    def training_SVR(self, Train_predictors, Train_target, C, epsilon, gamma, Test_predictors, Test_target):
 
         #SVR
-        SVR_forecast_model = SVR(kernel=kernel, C=C, epsilon=epsilon, gamma=gamma)
+        SVR_forecast_model = SVR(C=C, epsilon=epsilon, gamma=gamma)
         SVR_forecast_model.fit(Train_predictors, Train_target)
+        Score = SVR_forecast_model.score(Test_predictors, Test_target)
+        Target_predictions = SVR_forecast_model.predict(Test_predictors)
+        print(Target_predictions)
+        Mape = MAPE(Test_target, Target_predictions)
+        Mae = MAE(Test_target, Target_predictions)
+        Mse = MSE(Test_target, Target_predictions)
 
-        return SVR_forecast_model
+        return SVR_forecast_model, Target_predictions, Score, Mape, Mae, Mse
 
 
     def build_SVR(self, Weather_data_train, Weather_data_test, Demand_chosen_pred, MC, kernel, C, epsilon, gamma):
@@ -109,21 +113,17 @@ class Train:
         #Datos normalizados, Datos no normalizados
         Data_model_train, Data_model = self.get_data_to_train(Weather_data, Demand_chosen_pred, MC)
         
-        Train_predictors, Train_target, Test_predictors, Test_target = self.data_preparation(Data_model_train, Weather_data, Weather_data_train, Weather_data_test)
+        trainPredictors, trainRealValues, testPredictors, testRealValues = self.data_preparation(Data_model_train, Weather_data, Weather_data_train, Weather_data_test)
         
-        SVR_forecast_model = self.training_SVR(Train_predictors, Train_target, kernel, C, epsilon, gamma, Test_predictors)
+        print(trainPredictors)
+        print(testPredictors)
+        print(trainRealValues)
+        print(testRealValues)
+
+        #training_SVR(self, Train_predictors, Train_target, C, epsilon, gamma, Test_predictors, #Test_target)
+        SVRModel, testPredictions, Score, Mape, Mae, Mse = self.training_SVR(trainPredictors, trainRealValues, C, epsilon, gamma, testPredictors, testRealValues)
           
-
-        return SVR_forecast_model, Data_model, Test_predictors, Test_target
-
-
-class Test:
-    def testing(self, model, Test_predictors, Test_target):
         
-        Score = model.score(Test_predictors, Test_target)
-        Target_predictions = model.predict(Test_predictors)
-        Mape = MAPE(Test_target, Target_predictions)
-        Mae = MAE(Test_target, Target_predictions)
-        Mse = MSE(Test_target, Target_predictions)
+        return SVRModel, testPredictions, Score, Mape, Mae, Mse, Data_model, testRealValues
 
-        return Target_predictions, Score, Mape, Mae, Mse
+    

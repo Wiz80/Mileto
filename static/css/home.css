@@ -22,27 +22,13 @@
     --f1: 'SF Pro Display', sans-serif;
 }
 
-
-.formulario{
-    height: 70%;
-    width: 100%;
-    overflow-x: auto;
+.introduccion h1 {
+    background: -webkit-linear-gradient(var(--b2), #774dbe );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.formulario .row{
-    width: 120%;
-}
-
-.button_entrenar {
-    margin-top: 20px;
-}
-
-.button_entrenar img {
-    width: 60%;
-}
-
-.row table.metrics{
-    margin: 0 auto;
-    border-radius: 20px;
-    text-align: center;
+.content_data_page .introduccion{
+    padding-top: 5%;
+    width: 80%;
 }

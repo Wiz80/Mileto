@@ -127,3 +127,4 @@ class Demand_predictors:
         if hasattr(self, do) and callable(func := getattr(self, do)):
             get_dem = func()
             return get_dem
+        

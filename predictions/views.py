@@ -5,13 +5,13 @@ import pandas as pd
 import numpy as np
 #Train
 from predictions.models import Demand_Data
-from predictions.train_model import Train, Test
+from predictions.train_model import Train
 from predictions.get_predictors import Weather
 #Save model
 import sys
 sys.path.insert(1, 'C:\\Users\\pc\\Desktop\\Python\\Tesis\\Mileto\\predictions\\')
 from Google_Cloud import *
-from Google_Cloud.save_files import Google_Cloud_Drive
+from Google_Cloud.googleCloudInstance import Google_Cloud_Drive
 
 lista_weather_variables = [
     "temperature_2m",
@@ -74,7 +74,7 @@ def train_model(request):
         epsilon = float(request.POST['eps'])
         gamma = float(request.POST['gam'])
         C = int(request.POST['C'])
-        
+
         #Predictores de demanda
         Demand_chosen = []
         for i in lista_demand_variables:
@@ -101,34 +101,39 @@ def train_model(request):
         
         if model == 'SVR':
             #Entrenar modelo SVR
-            SVR_forecast_model, Data_model, Test_predictors, Target_values = Train().build_SVR(Weather_data_train, Weather_data_test, Demand_chosen, MC, kernel, C, epsilon, gamma)
-
-            #Test SVR
-            Target_predictions, Score, Mape, Mae, Mse = Test().testing(SVR_forecast_model, Test_predictors, Target_values)
-
-            #Demanda predecida no normalizada
-            Target_predictions = Target_predictions*max(Data_model['Demand'])
-            Target_values = Target_values*max(Data_model['Demand'])
+            train_model = Train()
             
-            results = {'time': np.array(Weather_data_test['time']) ,'Target_values': np.array(Target_values),'Target_predictions': np.array(Target_predictions)}
+
+            SVRModel, testPredictions, Score, Mape, Mae, Mse, Data_model, testRealValues = train_model.build_SVR(Weather_data_train,Weather_data_test, Demand_chosen, MC, kernel, C, epsilon, gamma)
+            #Demanda predecida no normalizada
+            testPredictions = testPredictions*max(Data_model['Demand'])
+            testRealValues = testRealValues*max(Data_model['Demand'])
+            
+            results = {'time': np.array(Weather_data_test['time']),
+                       'testRealValues': np.array(testRealValues),
+                       'testPredictions': np.array(testPredictions)}
+
             results = pd.DataFrame(results)
-            results.to_csv('./static/models/results.csv', encoding='utf-8', index=False)
+            results.to_excel('static/models/results.xlsx', sheet_name='predicciones', index=False)  
+            #results.to_csv('./static/models/results.csv', encoding='utf-8', index=False)
             googleDriveInstance = Google_Cloud_Drive()
             #To_delete (folder) - google drive
-            id_folder = "1Iu2CF4PPLc7vxD6b88Y7WZHVmFkiVes3"
-            googleDriveInstance.subir_archivo('./static/models/results.csv', id_folder)
+            #id_folder = "1Iu2CF4PPLc7vxD6b88Y7WZHVmFkiVes3"
+            id_file = "1IB0_RT1jKDs_MTq7hl7MNgvan_PlwJP4"
+            googleDriveInstance.sobreescribir_archivo(id_file, 'static/models/results.xlsx', 'results.xlsx') 
 
+            data = results.to_json(orient='records')
 
             return render(request, 'forecasting/train.html', 
-                          {'score': Score,
-                           'MAPE': Mape, 
-                           'MAE': Mae,
-                           'MSE': Mse,
-                           'file_name': 'results',
-                           'inicio': list(Weather_data_test['time'].dt.date)[0],
-                           'final': list(Weather_data_test['time'].dt.date)[-1],
-                           'min': min(Data_model['Demand']),
-                           'max': max(Data_model['Demand'])
+                          {'score' : "%.4f" % np.abs(Score),
+                           'MAPE'  : "%.4f" % Mape, 
+                           'MAE'   : "%.4f" % Mae,
+                           'MSE'   : "%.4f" % Mse,
+                           'data'  : data,
+                           'inicio': str(list(Weather_data_test['time'].dt.date)[0]),
+                           'final' : str(list(Weather_data_test['time'].dt.date)[-1]),
+                           'min'   : min(Data_model['Demand']),
+                           'max'   : max(Data_model['Demand'])
                            })
 
         elif model == 'ANN':
