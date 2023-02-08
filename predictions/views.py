@@ -9,7 +9,7 @@ from predictions.train_model import Train
 from predictions.get_predictors import Weather
 #Save model
 from predictions.Google_Cloud import *
-from predictions.Google_Cloud.save_files import Google_Cloud_Drive
+from predictions.Google_Cloud.googleCloudInstance import Google_Cloud_Drive
 
 lista_weather_variables = [
     "temperature_2m",
