@@ -5,11 +5,9 @@ import pandas as pd
 import numpy as np
 #Train
 from predictions.models import Demand_Data
-from predictions.train_model import Train, Test
+from predictions.train_model import Train
 from predictions.get_predictors import Weather
 #Save model
-#import sys
-#sys.path.insert(1, 'C:\\Users\\pc\\Desktop\\Python\\Tesis\\Mileto\\predictions\\')
 from predictions.Google_Cloud import *
 from predictions.Google_Cloud.save_files import Google_Cloud_Drive
 
@@ -42,7 +40,7 @@ lista_demand_variables = [
 # Create your views here.
 def predictions(request):
     loaded_model = pickle.load(open('static\SVR_model.sav', 'rb'))
-    return render(request, 'forecasting/Get_predictions.html')
+    return render(request, 'forecasting/test.html')
 
 def train_model(request):
     #Entradas del modelo
@@ -74,7 +72,7 @@ def train_model(request):
         epsilon = float(request.POST['eps'])
         gamma = float(request.POST['gam'])
         C = int(request.POST['C'])
-        
+
         #Predictores de demanda
         Demand_chosen = []
         for i in lista_demand_variables:
@@ -103,40 +101,92 @@ def train_model(request):
             #Entrenar modelo SVR
             SVR_forecast_model, Data_model, Test_predictors, Target_values = Train().build_SVR(Weather_data_train, Weather_data_test, Demand_chosen, MC, kernel, C, epsilon, gamma)
 
-            SVR_forecast_model = pickle.load(open('static/models/SVR_model.sav', 'rb'))
             #Test SVR
             Target_predictions, Score, Mape, Mae, Mse = Test().testing(SVR_forecast_model, Test_predictors, Target_values)
-            
 
             #Demanda predecida no normalizada
-            Target_predictions = Target_predictions*max(Data_model['Demand'])
-            Target_values = Target_values*max(Data_model['Demand'])
+            testPredictions = testPredictions*max(Data_model['Demand'])
+            testRealValues = testRealValues*max(Data_model['Demand'])
             
-            results = {'time': np.array(Weather_data_test['time']) ,'Target_values': np.array(Target_values),'Target_predictions': np.array(Target_predictions)}
-            results = pd.DataFrame(results)
-            results.to_csv('./static/models/results.csv', encoding='utf-8', index=False)
-            googleDriveInstance = Google_Cloud_Drive()
-            #To_delete (folder) - google drive
-            id_folder = "1Iu2CF4PPLc7vxD6b88Y7WZHVmFkiVes3"
-            googleDriveInstance.subir_archivo('./static/models/results.csv', id_folder)
+            results = {'time': np.array(Weather_data_test['time']),
+                       'testRealValues': np.array(testRealValues),
+                       'testPredictions': np.array(testPredictions)}
 
+            results = pd.DataFrame(results)
+            results.to_excel('static/models/results.xlsx', sheet_name='predicciones', index=False)   
+            today = datetime.now()
+            year = today.year
+            month = today.month
+            day = today.day
+            hour = today.hour   
+            dateName = f'{day}_{month}_{year}_{hour}'
+            rawFileName = f'static/models/SVR_{dateName}'
+            SVRFileName = rawFileName+'.sav' 
+            pickle.dump(SVRModel, open(SVRFileName, 'wb'))
+
+            googleDriveInstance = Google_Cloud_Drive()
+            id_folder = '1Iu2CF4PPLc7vxD6b88Y7WZHVmFkiVes3'
+            #Guardar modelo SVR
+            googleDriveInstance.subir_archivo(SVRFileName, id_folder)
+
+            id_file = "1IB0_RT1jKDs_MTq7hl7MNgvan_PlwJP4"
+            #Guardar resultados SVR
+            googleDriveInstance.sobreescribir_archivo(id_file, 'static/models/results.xlsx', 'results.xlsx') 
+            data = results.to_json(orient='records')
+            
+            
+            metadata = {'MC': MC,
+                        'model':model,
+                        'start_train_date': start_train_date,
+                        'end_train_date': end_train_date,
+                        'start_test_date': start_test_date,
+                        'end_test_date': end_test_date,
+                        'latitude': latitude,
+                        'longitud': longitud,
+                        'kernel': kernel,
+                        'epsilon': epsilon,
+                        'gamma': gamma,
+                        'C': C,
+                        'demand predictors': Demand_chosen,
+                        'weather predictors': weather_chosen}
+            
+            metadata = pd.DataFrame(metadata)
+            results.to_csv(f'{rawFileName}.csv', index=False) 
+            id_file_metadata = '1Rimaiu4TgcdWKUU0wBTBIzSf8tIvaecg'
+            #Guardar metadata
+            googleDriveInstance.sobreescribir_archivo(id_file_metadata, f'{rawFileName}.csv', 'metadata.csv') 
 
             return render(request, 'forecasting/train.html', 
-                          {'score': Score,
-                           'MAPE': Mape, 
-                           'MAE': Mae,
-                           'MSE': Mse,
-                           'file_name': 'results',
-                           'inicio': list(Weather_data_test['time'].dt.date)[0],
-                           'final': list(Weather_data_test['time'].dt.date)[-1],
-                           'min': min(Data_model['Demand']),
-                           'max': max(Data_model['Demand'])
+                          {'score' : "%.4f" % np.abs(Score),
+                           'MAPE'  : "%.4f" % Mape, 
+                           'MAE'   : "%.4f" % Mae,
+                           'MSE'   : "%.4f" % Mse,
+                           'data'  : data,
+                           'inicio': str(list(Weather_data_test['time'].dt.date)[0]),
+                           'final' : str(list(Weather_data_test['time'].dt.date)[-1]),
+                           'min'   : min(Data_model['Demand']),
+                           'max'   : max(Data_model['Demand']),
+                           'fileName_': dateName
                            })
 
         elif model == 'ANN':
             pass
 
-    return render(request, 'forecasting/train.html')
+    return render(request, 'forecasting/train.html', 
+                {
+                 'fileName_': 'SVR_8_2_2023_15'
+                })
+
+def save_model(request, fileName):
+    googleDriveInstance = Google_Cloud_Drive()
+    id_folder = "17BskLL0bgyjnsTTsXv6OkuXASzyylej7"
+    queryData = f"title = '{fileName}.sav'"
+    idData = googleDriveInstance.busca(queryData)
+    googleDriveInstance.mover_archivo(idData, id_folder)
+    idMetadata = f"title = 'metadata'"
+    googleDriveInstance.mover_archivo(idMetadata, id_folder)
+    return render(request, 'forecasting/test.html')
+
 
 def add_data(request):
     if request.method == 'POST':
