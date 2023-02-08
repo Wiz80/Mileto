@@ -212,19 +212,19 @@
                 </div>
             </div>
         </form>
+        <script type="text/javascript" src="{% static 'js/draw_time_series.js' %}"></script>
+        {% with inicio=inicio final=final min=min max=max%}
+        <script>
+            function call_results(){
+                const results_container = document.getElementById('results');
+                results_container.style.display = 'block';
+                var data = JSON.parse('{{ data|escapejs }}');
+                plotTimeSeries(data, '{{min}}', '{{max}}', '{{inicio}}', '{{final}}')
+            }
+        </script>
+        {% endwith %}
     </div>
-    <script type="text/javascript" src="{% static 'js/draw_time_series.js' %}"></script>
-    {% with inicio=inicio final=final min=min max=max%}
-    <script>
-        function call_results(){
-            const results_container = document.getElementById('results');
-            results_container.style.display = 'block';
-            var data = JSON.parse('{{ data|escapejs }}');
-            plotTimeSeries(data, '{{min}}', '{{max}}', '{{inicio}}', '{{final}}')
-        }
-    </script>
-    {% endwith %}
-    <div class="row" id="results" style="display: none;">
+    <div class="row resultados" id="results">
         <h1>Resultados de entrenamiento</h1>
         <div id='plot'><!-- Plotly chart will be drawn inside this DIV --></div>
         <table class="table metrics w-50">
@@ -252,15 +252,35 @@
                 <td class="tg-bgtg">{{score}}</td>
                 </tr>
             </tbody>
-        </table>     
+        </table>    
         <div class="row">
             <div class="col">
-
+                <div class="guardar_modelo">
+                    <h4>Guardar el modelo en la base de datos</h4>
+                    <p align="justify">El modelo que acaba de ser entrenado aún no ha sido guardado, sí desea que este quede en la base de datos de Mileto de click en el botón de guardar. Este quedará guardado con la inicial del nombre del tipo de entrenamiento que uso seguido de la fecha y lo hora en que se guardó</p>
+                    <p>Por ejemplo: 
+                    </p>
+                    <p style="font-weight: bold;">SVR_02_08_2023_11:10am</p>
+                    <div class="boton_guardar">
+                        <a href="{% url 'save_model' fileName=fileName_ %}"><img src="{% static 'images/Guardar.png'%}" alt="guardar" /></a>
+                    </div>
+                </div>
             </div>
             <div class="col">
-
+                <div class="ver_modelo">
+                    <h4>Ver los modelos ya guardados</h4>
+                    <p align="justify">Al dar click en el botón <label style="font-weight: bold;">modelos</label>, podrá acceder a todos los modelos que han sido entrenados anteriormente, el botón <label style="font-weight: bold;">info</label> lleva a la carpeta que contiene el metadata de la información con la que fueron entrenados esos modelos</p>
+                    <div class="row">
+                        <div class="col">
+                            <a href="#"><img src="{% static 'images/Modelos.png'%}" alt="guardar" /></a>
+                        </div>
+                        <div class="col">
+                            <a href="#"><img src="{% static 'images/Info.png'%}" alt="guardar" /></a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </div> 
     </div>
     
     {% if data %}

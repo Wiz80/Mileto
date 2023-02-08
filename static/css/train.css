@@ -33,6 +33,10 @@
     width: 120%;
 }
 
+.row.resultados{
+    width: 99%;
+}
+
 .button_entrenar {
     margin-top: 20px;
 }
@@ -43,6 +47,25 @@
 
 .row table.metrics{
     margin: 0 auto;
-    border-radius: 20px;
     text-align: center;
+}
+
+.content_data_page .row .col .guardar_modelo .boton_guardar{
+    text-align: center;
+}
+
+.content_data_page .row .col .guardar_modelo .boton_guardar img{
+    width: 25%;
+}
+
+
+.content_data_page .row .col .ver_modelo .row .col{
+    text-align: center;
+}
+.content_data_page .row .col .ver_modelo .row .col img{
+    width: 50%;
+}
+
+.content_data_page .row .col .ver_modelo .row .col{
+    margin-bottom: 10%;
 }

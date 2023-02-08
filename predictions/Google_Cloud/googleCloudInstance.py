@@ -2,7 +2,7 @@ from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 from pydrive2.files import FileNotUploadedError
 import os
-
+from datetime import datetime
 
 class Google_Cloud_Drive():
 
@@ -124,17 +124,24 @@ class Google_Cloud_Drive():
         archivo.Upload(param={'supportsTeamDrives': True})
         #Al mover un archivo este conserva el id
     
+
+if __name__ == '__main__':
     """
-    def read_file( id_file ) :
-        metadata = dict( id = id_file )
-        
-        google_file = google_drive.CreateFile( metadata = metadata )
-
-        google_file.GetContentFile( filename = id_file )
-
-        content_bytes = google_file.content ; # BytesIO
-
-        string_data = content_bytes.read().decode( 'utf-8' )
-
-        return string_data
+    id_archivo = '1ZVorkxDwn56Zgfh9FPlfkEtV92Nz3tmb'
+    id_folder = '17BskLL0bgyjnsTTsXv6OkuXASzyylej7'
+    """
+    today = datetime.now()
+    year = today.year
+    month = today.month
+    day = today.day
+    hour = today.hour  
+    SVRFilename = f'static/models/SVR_{day}_{month}_{year}_{hour}.sav'
+    print(SVRFilename)
+    """
+    GCInstance = Google_Cloud_Drive()
+    query = "title = 'SVR_model.sav'"
+    id = GCInstance.busca(query)
+    id_folder = '17BskLL0bgyjnsTTsXv6OkuXASzyylej7'
+    print(id)
+    GCInstance.mover_archivo(id, id_folder)
     """
