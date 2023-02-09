@@ -39,7 +39,6 @@ lista_demand_variables = [
 
 # Create your views here.
 def predictions(request):
-    loaded_model = pickle.load(open('static\SVR_model.sav', 'rb'))
     return render(request, 'forecasting/test.html')
 
 def train_model(request):
