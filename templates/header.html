@@ -1,29 +1,93 @@
 {% extends "layout.html" %}
 {% load static %}
 {% block navbar %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+            cambiarLogo();
+    });
+    function cambiarLogo() {
+        var logos = ["{% static 'images/miletoLogo1.svg'%}", "{% static 'images/miletoLogo2.svg'%}", "{% static 'images/miletoLogo3.svg'%}"];
+        var randomIndex = Math.floor(Math.random() * 3);
+        var gettedImg = logos[randomIndex];
+        var logoImg = document.getElementById("logoImg"); // o reemplaza "logo" con el ID del elemento de imagen en tu página HTML
+        console.log(gettedImg)
+        logoImg.src = gettedImg;
+    }
+</script>
 <div class="nav_bar">
     <div class="logo">
-        <img src="{% static 'images/mileto_logo3.svg'%}" alt="Logo" class="mx-auto">
+      <a href="{% url 'home'%}">
+        <img id="logoImg" src="{% static 'images/MiletoLogo1.svg'%}" alt="Logo" class="mx-auto">
+      </a>
     </div>
     <div class="home">
         <div class="btn-group-vertical" role="group" aria-label="Basic example">
-             <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">
-               <a href="#"><img src="{% static 'images/home.svg'%}" alt="Logo" class="mx-auto"></a> 
-             </button>
-             <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">
-                <img src="{% static 'images/forecast.svg'%}" alt="Logo" class="mx-auto">
-            </button>
-            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">
-                <img src="{% static 'images/add.svg'%}" alt="Logo" class="mx-auto">
-            </button>
-            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">
-                <img src="{% static 'images/settings.svg'%}" alt="Logo" class="mx-auto">
-            </button>
+              <a href="{% url 'home'%}">
+                <button title="Home" class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">
+                  <img src="{% static 'images/physics.gif'%}" alt="Logo" class="mx-auto">
+                </button>
+              </a> 
+              {% if user.is_authenticated %}
+              {% if user.is_superuser %}
+                <a href="{% url 'train'%}">
+                  <button title="training" class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">
+                    <img src="{% static 'images/train-logo.svg'%}" alt="Logo" class="mx-auto">
+                </button>
+                </a>
+              {% endif %}
+              {% endif %}
+              <a href="{% url 'predictions'%}">
+                <button title="testing" class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">
+                  <img src="{% static 'images/sword.png'%}" alt="Logo" class="mx-auto">
+              </button>
+              <a href="{% url 'evaluate'%}">
+                <button title="testing" class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">
+                  <img src="{% static 'images/share.gif'%}" alt="Logo" class="mx-auto">
+              </button>
+              </a>
+              <a href="{% url 'data'%}">
+                <button title="add data" class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">
+                  <img src="{% static 'images/add.svg'%}" alt="Logo" class="mx-auto">
+              </button>
+              </a>
+              <a href="{% url 'get-started'%}">
+                <button title="getting started" class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">
+                  <img src="{% static 'images/column.png'%}" alt="Logo" class="mx-auto">
+              </button>
+              </a>
           </div>
     </div>
     <div class="user_login">
-        <img src="{% static 'images/mileto_login.svg'%}" alt="Logo" class="mx-auto">
+      {% if not user.is_authenticated %}
+        <a href="{% url 'miletoLogin'%}">
+          <img src="{% static 'images/mileto_login.svg'%}" alt="Logo" class="mx-auto">
+        </a>
+      {% else %}
+      <div class="text-center">
+        <p class="username">{{user.username}}</p>
+      </div>
+      {% endif %}
     </div>
 </div>
-
+<header class="position-absolute top-0 start-0 end-0 bg-dark">
+    <!-- Contenedor del header -->
+    <div class="container-fluid">
+      <!-- Fila del header -->
+      <div class="row align-items-center justify-content-between">
+        <!-- Columna del logo -->
+        <div class="col-auto">
+          <!-- Logo -->
+          <!--<img src="logo.png" alt="Logo" class="img-fluid">-->
+        </div>
+        <!-- Columna de los iconos -->
+        <div class="d-flex col-auto">
+          <!-- Iconos -->
+          {% if not user.is_authenticated %}
+            <a href="{% url 'miletoLogin'%}" class="text-white me-3"><i class="bi bi-person"></i></a>
+          {% endif %}
+          <a href="#" class="text-white"><i class="bi bi-github"></i></a>
+        </div>
+      </div>
+    </div>
+</header>
 {% endblock %}

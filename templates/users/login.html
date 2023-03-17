@@ -1,0 +1,38 @@
+{% extends "header.html" %}
+{% load static %}
+{% block content %}
+<div class="content_data_page">
+    <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
+        <div class="user-card d-flex align-items-center justify-content-center">
+            <div class="content-login-card">
+                <div class="text-center">
+                    <img src="{% static 'images/mileto_login.svg'%}" alt="Logo" class="mx-auto" width="70" height="70">
+                </div>
+                <form action="{% url 'miletoLogin'%}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group" class="text-start" >
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control w-100" id="email" name="email" required>
+                    </div>
+                    <div class="form-group" class="text-left">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control w-100" id="password" name="password" required>
+                    </div>
+                    <div class="text-center">
+                        <a class="text-center" href="#">¿Olvidó su contraseña?</a>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit">
+                            <img src="{% static 'images/LogIn.png'%}" alt="" width="140">
+                        </button>
+                    </div>
+                    <div class="text-center">
+                        <a href="{% url 'signup'%}">¿No tiene una cuenta?</a>
+                    </div>
+                </form>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

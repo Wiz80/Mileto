@@ -1,32 +1,72 @@
-:root{
-    --b: #3F67E9;
-    --b1: #1492E6;
-    --r: #FF3341;
-    --g1: #E4FF1A;
-    --g2: #89FC00;
-    --g3: #AFFC41;
-    --w1: #FFFFFF;
-    --w2: #F8F9FA;
-    --w3: RGB(246,246,246,80);
-    --gr1: #E9ECEF;
-    --gr2: #DEE2E6;
-    --gr3: #929394;
-    --gr4: #b4b4b4;
-    --bl1: #212529;
-    --bl2: #484F56;
-    --small: 6px;
-    --medi-small: 11px;
-    --medium: 13px;
-    --large: 15px;
-    --f1: 'SF Pro Display', sans-serif;
-}
-
 .predictions{
     width: 80%;
 }
+
+.predictions .option_div select{
+    height: 100%;
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+
+.predictions .option_div .testing{
+    margin-bottom: 5%;
+}
+
 
 .buttons img{
     width: 24px;
 }
 
 
+.content_data_page .test_page .row{
+    width: 100%;
+    height: 100%;
+}
+
+.metadata-table{
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+
+.col-metadata::-webkit-scrollbar {
+    width: 0.7em;
+    background-color: #F5F5F5;
+}
+   
+.col-metadata::-webkit-scrollbar-thumb {
+    background-color: var(--gr3);
+    border-radius: 10px;
+}
+   
+.col-metadata::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+}
+
+.col-metadata .tabla-predictores{
+    font-size: var(--medi-small);
+    font-weight: 500;   
+}
+
+.test_page label,select,input, p{
+    font-size: var(--medi-small);
+    font-weight: 500;  
+}
+
+
+.col-metadata .test-button{
+    margin-top: 5%;
+}
+
+.col-metadata .test-button img{
+    width: 70%;
+}
+
+
+.col-metadata .row .col img{
+    width: 80%;
+}
+
+.col-metadata .row .col .subir-predictores{
+    cursor: pointer;
+}

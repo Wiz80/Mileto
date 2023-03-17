@@ -1,24 +1,3 @@
-:root{
-    --b: #3F67E9;
-    --r: #FF3341;
-    --b1: #30D6E2;
-    --b2: #25ACA8;
-    --w1: #FFFFFF;
-    --w2: #F8F9FA;
-    --w3: RGB(246,246,246,80);
-    --gr1: #E9ECEF;
-    --gr2: #DEE2E6;
-    --gr3: #929394;
-    --gr4: #b4b4b4;
-    --bl1: #212529;
-    --bl2: #484F56;
-    --small: 6px;
-    --medi-small: 11px;
-    --medium: 13px;
-    --large: 15px;
-    --f1: 'SF Pro Display', sans-serif;
-}
-
 body{
     font-family: var(--f1);
     color: var(--bl2);
@@ -30,7 +9,36 @@ a{
     text-decoration: none;
 }
 
+.content_data_page{
+    margin-left: 10%;
+}
+
 .content_page{
     margin-left: 6%;
 }
 
+
+select{
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+
+input{
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+
+body::-webkit-scrollbar {
+    width: 0.7em;
+    background-color: #F5F5F5;
+}
+   
+body::-webkit-scrollbar-thumb {
+    background-color: var(--gr3);
+    border-radius: 10px;
+}
+   
+body::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+}

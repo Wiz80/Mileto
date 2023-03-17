@@ -1,41 +1,140 @@
 {% extends "header.html" %}
 {% load static %}
 {% block content %}
+<script>
+    function addFiles() {
+        const fileExcelInput = document.getElementById('demand-file-xlsx');
+        fileExcelInput.click();
+    }
+    function displaySuccess() {
+        const messageSuccess = document.getElementById('already-add');
+        messageSuccess.style.display = 'block';
+    }
+</script>
+
 <div class="content_data_page">
-    <div class="data_page">    
-        <h2>Añadir información a la base de datos</h2>
-        <div class="form-data">
-            <form action="{% url 'data'%}" method = "POST">
+    <div class="row d-flex align-items-center justify-content-center w-100" style="height: 100vh;">
+        <div class="col">
+            <form action="{% url 'data'%}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+                {% if successMessage %}
+                <p style="width: 450px;">{{successMessage}}</p>
+                {% endif %}
+                <h3>Añadir información a la base de datos</h3>
+                <div class="d-flex justify-content-center">
+                    <p>A continuación se le pedirá que cargue los archivos de demanda de energía
+                        proveidos por <a
+                            href="https://www.xm.com.co/consumo/informes-demanda/indicadores-de-pronosticos-oficiales-de-demanda"
+                            target="_blank">XM</a>
+                        podrá subir la cantidad de archivos .xlsx que usted quiera, esto con el objetivo de alimentar la
+                        base de datos de Mileto, para más
+                        información de cómo hacer este procedimiento redirigase a <a href="{% url 'home'%}"
+                            target="_blank">home</a>
+
+                    </p>
+                </div>
                 {% if error %}
                 <div class="option_div warning">
                     <span>{{error}}</span>
-                </div>  
+                </div>
                 {% endif %}
                 <div class="option_div">
-                    <label class="w-100">Seleccione la fuente de datos</label>
-                    <select name = "fuente" class="form-select" aria-label="Default select example">
-                        <option value="1">XM: Datos de demanda de energía anteriores</option>
-                        <option value="2">Climatología</option>
-                        <option value="3">Pronóstico del clima</option>
+                    <label class="w-100">Seleccione el mercado de comercialización</label>
+                    <select name="UPC-MC" class="form-select" aria-label="Default select example">
+                        <option value="Antioquia">MC-Antioquia</option>
+                        <option value="Arauca">MC-Arauca</option>
+                        <option value="Atlantico">MC-Atlantico</option>
+                        <option value="Bajoputumayo">MC-BajoPutumayo</option>
+                        <option value="Bolivar">MC-Bolivar</option>
+                        <option value="Boyaca">MC-Boyaca</option>
+                        <option value="Caldas">MC-Caldas</option>
+                        <option value="Cali">MC-Cali</option>
+                        <option value="Caqueta">MC-Caqueta</option>
+                        <option value="Cartago">MC-Cartago</option>
+                        <option value="Casanare">MC-Casanare</option>
+                        <option value="Cauca">MC-Cauca</option>
+                        <option value="Celsia">MC-Celsia</option>
+                        <option value="Cerromatoso">MC-Cerromatoso</option>
+                        <option value="Cesar">MC-Cesar</option>
+                        <option value="Choco">MC-Choco</option>
+                        <option value="CiraInfanta">MC-CiraInfanta</option>
+                        <option value="Codensa">MC-Codensa</option>
+                        <option value="CordobaSucre">MC-CordobaSucre</option>
+                        <option value="Drummond">MC-Drummond</option>
+                        <option value="DrummondLoma">MC-DrummondLoma</option>
+                        <option value="Emec">MC-Emec</option>
+                        <option value="Gm">MC-GM</option>
+                        <option value="Guaviare">MC-Guaviare</option>
+                        <option value="Huila">MC-Huila</option>
+                        <option value="Intercor">MC-Intercor</option>
+                        <option value="Meta">MC-Meta</option>
+                        <option value="Nariño">MC-Nariño</option>
+                        <option value="NorSantander">MC-NorSantander</option>
+                        <option value="Oxy">MC-Oxy</option>
+                        <option value="Pereira">MC-Pereira</option>
+                        <option value="Planeta">MC-Planeta</option>
+                        <option value="Putumayo">MC-Putumayo</option>
+                        <option value="Quindio">MC-Quindio</option>
+                        <option value="Rubiales">MC-Rubiales</option>
+                        <option value="Ruitoque">MC-Ruitoque</option>
+                        <option value="SanFernando">MC-SanFernando</option>
+                        <option value="Santander">MC-Santander</option>
+                        <option value="Sin">MC-SIN</option>
+                        <option value="Tolima">MC-Tolima</option>
+                        <option value="TubosCaribe">MC-TubosCaribe</option>
+                        <option value="Tulua">MC-Tulua</option>
+                        <option value="ValleSibundoy">MC-ValleSibundoy</option>
                     </select>
                 </div>
                 <div class="option_div">
                     <label class="w-100">Establezca desde que fecha quiere recolectar los datos</label>
-                    <input class="w-100" type="date" name="Fecha_inicio" placeholder = "Fecha de inicio">
+                    <input class="w-100" type="date" name="fechaInicio" placeholder="Fecha de inicio">
                 </div>
                 <div class="option_div">
                     <label class="w-100">Establezca hasta que fecha quiere recolectar los datos</label>
-                    <input class="w-100" type="date" name="Fecha_cierre" placeholder = "Fecha de inicio">
+                    <input class="w-100" type="date" name="fechaCierre" placeholder="Fecha de cierre">
                 </div>
-                <label class="w-100" for="fileSelect">Spreadsheet</label> 
-                <input id="fileSelect" name="file_spread_sheet" mutiple type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
-                <div class="button_div">
+                <div class="text-center" id="dropzone">
+                    <img style="cursor:pointer; width:40%;" onclick="addFiles();"
+                        src="{% static 'images/add-files.png'%}" alt="">
+                    <p style="display:none;" id="already-add">Archivos añadidos</p>
+                    <input type="file" multiple id="demand-file-xlsx" name="demandFiles"
+                        accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                        style="display:none;" onchange="displaySuccess();">
+                </div>
+                <div class="button_div" style="margin-top:10%;">
                     <button type="submit">
                         <img src="{% static 'images/add.svg'%}" alt="mas">
                     </button>
                 </div>
             </form>
+
+        </div>
+        <div class="col">
+            <h3>Datos subidos</h3>
+            <table class="table metrics w-100">
+                <thead class="tablehead">
+                    <tr>
+                        <th>MC</th>
+                        <th>Fecha inicio</th>
+                        <th>Fecha final</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>              
+                    {% for idx, fecha in fechasUCP.iterrows %}
+                        <td class="tg-bgtg">{{idx}}</td>
+                        <td class="tg-bgtg">{{fecha.min}}</td>
+                        <td class="tg-bgtg">{{fecha.max}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table> 
+            <br>
+            <div class="d-flex align-items-center justify-content-center">
+                <p>Total de registros:    </p>
+                <p>   {{registros}}</p>
+            </div>
         </div>
     </div>
 </div>

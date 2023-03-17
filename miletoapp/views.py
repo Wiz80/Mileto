@@ -7,5 +7,8 @@ from django.forms.models import model_to_dict
 def index(request):
     return render(request, 'home.html')
 
+def gettingStarted(request):
+    return render(request, 'mileto_start\getting_started.html')
+
 
 # Create your views here.

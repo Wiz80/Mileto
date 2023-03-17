@@ -1,44 +1,37 @@
-:root {
-    --b: #3F67E9;
-    --b1: #1492E6;
-    --b2: #0000FF;
-    --r: #FF3341;
-    --g1: #E4FF1A;
-    --g2: #89FC00;
-    --g3: #AFFC41;
-    --w1: #FFFFFF;
-    --w2: #F8F9FA;
-    --w3: RGB(246, 246, 246, 80);
-    --gr1: #E9ECEF;
-    --gr2: #DEE2E6;
-    --gr3: #929394;
-    --gr4: #b4b4b4;
-    --bl1: #212529;
-    --bl2: #484F56;
-    --small: 6px;
-    --medi-small: 11px;
-    --medium: 13px;
-    --large: 15px;
-    --f1: 'SF Pro Display', sans-serif;
+.formulario{
+    height: 60%;
+    width: 100%;
 }
 
+.formulario .option_div .form-check input, label{
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+.content_data_page .formulario::-webkit-scrollbar-thumb {
+    background-color: var(--gr3);
+    border-radius: 10px;
+}
 
-.formulario{
-    height: 70%;
-    width: 100%;
-    overflow-x: auto;
+.content_data_page .formulario::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+}
+
+.formulario .row .col .option_div select, input, label{
+    font-size: var(--medi-small);
+    font-weight: 500;
 }
 
 .formulario .row{
-    width: 120%;
+    width: 140%;
 }
 
 .row.resultados{
-    width: 99%;
+    width: 100%;
 }
 
 .button_entrenar {
-    margin-top: 20px;
+    margin-bottom: 5%;
 }
 
 .button_entrenar img {
@@ -68,4 +61,25 @@
 
 .content_data_page .row .col .ver_modelo .row .col{
     margin-bottom: 10%;
+}
+
+.row.lastRowTrain{
+    margin-bottom: 15px;
+}
+
+.row.resultados .table{
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+
+.row .lastRowTrain{
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+
+.row .lastRowTrain .boton_guardar button{
+    width: 100%;
+}
+.js-plotly-plot .plotly .main-svg{
+    width: 100%;
 }

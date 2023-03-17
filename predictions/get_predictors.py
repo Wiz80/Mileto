@@ -31,8 +31,11 @@ class Weather:
         self.latitude = latitude
         self.longitude = longitude 
     
-    def get_weather_data(self, weather_chosen_params):
-        url = f"https://archive-api.open-meteo.com/v1/era5?latitude={self.latitude}&longitude={self.longitude}&start_date={self.inicio}&end_date={self.final}&hourly="
+    def get_weather_data(self, weather_chosen_params, isHistorical):
+        if isHistorical:
+            url = f"https://archive-api.open-meteo.com/v1/era5?latitude={self.latitude}&longitude={self.longitude}&start_date={self.inicio}&end_date={self.final}&hourly="
+        else:
+            url = f"https://api.open-meteo.com/v1/forecast?latitude={self.latitude}&longitude={self.longitude}&hourly="
         for i in weather_chosen_params:
             if i == weather_chosen_params[-1]:
                 url += f"{i}"
@@ -76,6 +79,22 @@ class Day_predictors:
     def get_hour(self):
         return np.array(self.weather_data['time'].dt.hour)
 
+    def call_day_predictors(self, timePredictors):
+        #Predictores de días 
+        dayOfTheWeek = self.create_DayOfTheWeek()
+        festDay = self.create_fest_array(dayOfTheWeek)
+        hour = self.get_hour()
+
+        data_model = {}
+        for i in self.weather_data.columns:
+            if i != 'time':
+                data_model[i] = self.weather_data[i]
+
+        dayPredictorsAssign = {'dayOfTheWeek': dayOfTheWeek, 'festDay': festDay, 'dayHour': hour}
+        for timePred in timePredictors:
+            data_model[timePred] = dayPredictorsAssign[timePred]
+
+        return data_model
 
 class Demand_predictors:
 

@@ -18,7 +18,7 @@ function plotTimeSeries(data, min, max, inicio, final){
   name: "Demanda Predecida",
   x: time,
   y: testPredictions,
-  line: {color: '#17BECF'}
+  line: {color: '#01E1D4'}
   }
 
   var dataPlot = [trace1,trace2];
@@ -27,8 +27,8 @@ function plotTimeSeries(data, min, max, inicio, final){
     title: {  text: 'Predicción y valor real de demanda de energía (MW)',
             font: {
               family: 'SF Pro Display',
-              weight: 700,
-              size: 20
+              weight: 'bold',
+              size: 15
             },
           },
     xaxis: {

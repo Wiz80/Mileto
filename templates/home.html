@@ -2,17 +2,424 @@
 {% load static %}
 {% block content %}
 <div class="content_data_page">
-    <div class="introduccion">
-        <h1 class="glading">
-            Bienvenid@ a Mileto!
-        </h1>
-        <p>
-            Bienvenido a nuestra página web para predecir la demanda de energía eléctrica a corto plazo en los mercados de comercialización en Colombia. La predicción precisa de la demanda de energía es esencial para garantizar la estabilidad del sistema eléctrico y minimizar los riesgos asociados con la falta o exceso de generación.
-        </p>
-        <p>
-            En esta página, utilizamos tanto modelos de soporte vectorial (SVR) como redes neuronales para predecir la demanda de energía. Los modelos SVR son una técnica de aprendizaje automático utilizada para resolver problemas de regresión, mientras que las redes neuronales son una técnica de aprendizaje automático inspirada en el cerebro humano que se utiliza para resolver problemas de clasificación y regresión. Ambos métodos se utilizan para analizar grandes cantidades de datos y hacer predicciones precisas.
-        </p>
-        
-    </div>
+    <div class="container">
+        <div class="home-row row">
+            <img src="{% static 'images/homeCover.jpg'%}" class="img-fluid" alt="Imagen de cover"
+                style="object-fit: cover; height: 45vh; width: 100%;">
+            <div class="col-12">
+                <!-- Nav tabs -->
+                <h1>Mileto - Predicciones de demanda de energía!</h1>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="bienvenida-tab" data-bs-toggle="tab"
+                            data-bs-target="#bienvenida" type="button" role="tab" aria-controls="bienvenida"
+                            aria-selected="true">Bienvenida</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="historia-tab" data-bs-toggle="tab" data-bs-target="#historia"
+                            type="button" role="tab" aria-controls="historia" aria-selected="true">Historia de
+                            Mileto</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="estado-tab" data-bs-toggle="tab" data-bs-target="#estado"
+                            type="button" role="tab" aria-controls="estado" aria-selected="false">Estado del
+                            arte</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="modelos-tab" data-bs-toggle="tab" data-bs-target="#modelos"
+                            type=button role=tab aria-controls=modelos aria-selected=false>Modelos de
+                            predicción</button>
+                    </li>
+                    <li class=nav-item role=presentation>
+                        <button class=nav-link id=contacto-tab data-bs-toggle=tab data-bs-target=#contacto type=button
+                            role=tab aria-controls=contacto aria-selected=false>Contacto</button>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class=tab-content id=myTabContent>
+                    <div class=tab-pane fade show active id=bienvenida role=tabpanel aria-labelledby=modelos-tab>
+                        <h2>Introducción a Mileto</h2>
+                        <p class="text-justify">Mileto es un servicio web para la predicción de la demanda de energía
+                            eléctrica a corto plazo. La
+                            predicción de la demanda de energía es una herramienta clave para incrementar la eficiencia
+                            y el
+                            control sobre la producción de energía, así como para optimizar la gestión y proporcionar el
+                            mejor <a
+                                href="https://www.iic.uam.es/soluciones/energia/prediccion-demanda-energia/">servicio al
+                                cliente</a>.</p>
+                        <p class="text-justify">Este servicio web está enfocado en las resoluciones vigentes de la
+                            Comisión de Regulación de
+                            Energía y Gas (CREG) en Colombia, que establecen los criterios y metodologías para el
+                            cálculo y
+                            aplicación de los cargos por uso de las redes del Sistema Interconectado Nacional (SIN) y
+                            los
+                            <a
+                                href="https://www.researchgate.net/publication/340316114_Prediccion_de_demanda_de_energia_electrica_mediante_redes_neuronales_artificiales">cargos
+                                por confiabilidad</a>. Estos cargos dependen en gran medida de las proyecciones de
+                            demanda de energía eléctrica que realizan los agentes del mercado.
+                        </p>
+                        <p class="text-justify">Mileto fue elaborado por Harrison Hoyos Plazas, estudiante de ingeniería
+                            eléctrica de la
+                            Universidad Industrial de Santander (UIS), con la guía del director de tesis Jairo Blanco
+                            Solano
+                            y el co-director César Duarte Chacón. La página web fue construida usando el framework
+                            Django,
+                            html, css, javascript y bootstrap 5.</p>
+                        <p class="text-justify">Para realizar las predicciones de demanda de energía eléctrica, Mileto
+                            utiliza un modelo de
+                            machine learning basado en support vector regression (SVR), que es una técnica que permite
+                            estimar funciones no lineales a partir de datos históricos. El modelo SVR se implementó
+                            usando
+                            la librería <a href="https://www.redalyc.org/pdf/462/46247652001.pdf">scikit-learn</a>, que
+                            es una herramienta popular y eficiente para el análisis y
+                            procesamiento de datos en Python.</p>
+                        <p class="text-justify">Si quieres saber más sobre el estado del arte en la predicción de
+                            demanda de energía eléctrica,
+                            puedes visitar <a href="#estado">esta sección</a> donde encontrarás una revisión
+                            bibliográfica sobre los principales métodos y aplicaciones existentes.</p>
+                    </div>
+                    <div class=tab-pane fade id=historia role=tabpanel aria-labelledby=bienvenida-tab>
+                        <h2>¿Por qué Mileto?</h2>
+                        <p class="text-justify">
+                            Tales de Mileto era un hombre curioso y apasionado por el conocimiento. Le gustaba
+                            observar
+                            el cielo y los
+                            fenómenos naturales, y trataba de encontrar explicaciones racionales a todo lo que veía.
+                            También se
+                            interesaba
+                            por las matemáticas y la geometría, y descubrió varios teoremas y propiedades que llevan
+                            su
+                            nombre.
+                        </p>
+                        <p class="text-justify">
+                            Sin embargo, no todos apreciaban su sabiduría. Muchos de sus vecinos lo consideraban un
+                            vago
+                            e inútil, que
+                            se
+                            dedicaba a perder el tiempo con sus especulaciones filosóficas en vez de trabajar para
+                            ganarse la vida. Le
+                            decían que sus conocimientos no servían para nada práctico, y que era un pobre iluso que
+                            vivía en un mundo
+                            de
+                            fantasía.
+                        </p>
+                        <p class="text-justify">
+                            Tales se sentía ofendido y frustrado por estas críticas. Quería demostrarles que su amor
+                            por
+                            el conocimiento
+                            no
+                            era una debilidad, sino una fortaleza. Quería mostrarles que un filósofo podía ser tan
+                            rico
+                            como cualquier
+                            comerciante o agricultor, si así lo deseaba.
+                        </p>
+                        <p class="text-justify">
+                            Un día, se le ocurrió una idea genial. Recordó que había estudiado los ciclos de las
+                            estrellas y los
+                            planetas, y
+                            que había notado una relación entre sus movimientos y las estaciones del año. También
+                            recordó que había
+                            observado los patrones climáticos de su región, y que había detectado ciertos indicios
+                            de
+                            humedad y
+                            temperatura
+                            que anticipaban la llegada de lluvias abundantes.
+                        </p>
+                        <p class="text-justify">
+                            Con estos datos en mente, hizo un cálculo matemático y una estimación estadística. Llegó
+                            a
+                            la conclusión de
+                            que
+                            ese año habría una cosecha excepcional de aceitunas, uno de los productos más apreciados
+                            y
+                            demandados en su
+                            época.
+                        </p>
+                        <p class="text-justify">
+                            Decidió aprovechar esta oportunidad para hacerse rico. Pidió prestado todo el dinero que
+                            pudo a sus amigos y
+                            familiares, y se fue al mercado a alquilar todos los molinos de aceitunas disponibles
+                            durante el invierno.
+                            Los
+                            dueños de los molinos le cobraron muy poco, pues nadie más estaba interesado en ellos en
+                            esa
+                            época del año.
+                        </p>
+                        <p class="text-justify">
+                            Tales esperó pacientemente a que llegara la primavera. Cuando las aceitunas empezaron a
+                            madurar en los
+                            árboles,
+                            todos los agricultores se dieron cuenta de que efectivamente había sido un año muy
+                            favorable
+                            para el
+                            cultivo. Se
+                            alegraron mucho por su buena fortuna, pero pronto se encontraron con un problema: no
+                            tenían
+                            dónde procesar
+                            sus
+                            aceitunas para obtener el preciado aceite.
+                        </p>
+                        <p class="text-justify">
+                            Fue entonces cuando Tales apareció con una sonrisa triunfal. Les dijo que él tenía todos
+                            los
+                            molinos
+                            alquilados
+                            hasta el final del verano, y que estaba dispuesto a subalquilarlos a quien quisiera
+                            usarlos.
+                            Pero les
+                            advirtió
+                            que les cobraría muy caro, pues sabía que eran la única opción disponible.
+                        </p>
+                        <p class="text-justify">
+                            Los agricultores no tuvieron más remedio que aceptar las condiciones de Tales. Le
+                            pagaron
+                            grandes sumas de
+                            dinero por cada molino usado durante cada día. Tales se hizo así con una fortuna enorme
+                            en
+                            poco tiempo.
+                        </p>
+                        <p class="text-justify">
+                            Cuando terminó la temporada de cosecha, Tales devolvió el dinero prestado con creces a
+                            sus
+                            amigos y
+                            familiares.
+                            También devolvió los molinos a sus dueños originales sin ningún daño ni reclamo.
+                        </p>
+                        <p class="text-justify">
+                            Luego se presentó ante sus críticos con una bolsa llena de monedas de oro. Les dijo:
+                            “¿Veis?
+                            Os he
+                            demostrado
+                            que un filósofo puede hacerse rico si quiere. Pero yo no quiero ser rico por ser rico;
+                            yo
+                            quiero ser rico
+                            por
+                            ser sabio”.
+                        </p>
+                        <p class="text-justify">
+                            Y acto seguido les regaló todo su dinero a los pobres y necesitados de su ciudad. Y
+                            volvió a
+                            dedicarse a su
+                            pasión: la filosofía.
+                        </p>
+                        <p class="text-justify">
+                            La historia de Tales nos enseña la importancia de las predicciones basadas en el
+                            conocimiento científico y
+                            matemático. Gracias a ellas podemos anticiparnos a los acontecimientos futuros y tomar
+                            mejores decisiones
+                            para
+                            nuestro beneficio o para el bien común. La aplicación de los conocimientos de la ciencia
+                            en
+                            la vida diaria
+                            es lo
+                            que hace de la vida moderna un profundo ciclo de mejoramiento continuo que más adelante
+                            con
+                            la llegada de
+                            nuevas
+                            herramientas tecnológias disruptivas como la <a
+                                href="https://www.ibm.com/topics/quantum-computing">computación cuántica</a> y las
+                            <a href="https://en.wikipedia.org/wiki/Artificial_general_intelligence">AGI's</a> nos
+                            permitirán tener más
+                            conocimiento sobre el futuro.
+                        </p>
+                    </div>
+                    <div class=tab-pane fade id=estado role=tabpanel aria-labelledby=estado-tab>
+                        <h2>Predicciones de demanda de energía eléctrica a corto plazo</h2>
+                        <p class="text-justify">La demanda de energía eléctrica es una variable clave para la
+                            planificación y operación
+                            del sistema eléctrico, ya que determina la cantidad y el tipo de recursos necesarios
+                            para satisfacerla. La predicción de la demanda eléctrica a corto plazo (PDECP) consiste
+                            en estimar la demanda futura en un horizonte temporal que va desde unas horas hasta unos
+                            días. La PDECP es útil para optimizar el despacho económico de las unidades generadoras,
+                            programar el mantenimiento preventivo, gestionar los recursos renovables intermitentes y
+                            participar en los mercados eléctricos.</p>
+                        <p class="text-justify">La PDECP es un problema complejo y desafiante debido a la naturaleza no
+                            lineal,
+                            estocástica y dinámica de la demanda eléctrica. La demanda depende de múltiples factores
+                            exógenos como las condiciones meteorológicas, el tipo de día (laborable o festivo), los
+                            eventos especiales o los precios de la electricidad. Además, la demanda presenta
+                            patrones estacionales (diarios, semanales o anuales) y tendencias a largo plazo.</p>
+                        <p class="text-justify">Para abordar el problema de la PDECP se han propuesto diversos métodos
+                            basados en
+                            técnicas estadísticas, inteligencia artificial o híbridas. Entre las técnicas
+                            estadísticas se encuentran los modelos autorregresivos integrados de media móvil
+                            (ARIMA), los modelos exponenciales suavizados (ETS) o los modelos estructurales (STL).
+                            Entre las técnicas de inteligencia artificial se encuentran las redes neuronales
+                            artificiales (ANN), los árboles de decisión (DT), las máquinas de vectores soporte (SVM)
+                            o las redes bayesianas (BN).</p>
+                        <h3>Support vector machine y support vector regression</h3>
+                        <p class="text-justify">Las máquinas de vectores soporte (SVM) son un conjunto de métodos
+                            supervisados ​​de
+                            aprendizaje automático que analizan los datos para clasificación y regresión. Las SVM se
+                            basan en el concepto de encontrar un hiperplano óptimo que separe las clases o minimice
+                            el error entre los valores observados y predichos.</p>
+                        <p class="text-justify">Las SVM tienen varias ventajas como su efectividad en espacios
+                            dimensionales altos, su
+                            robustez frente al ruido o su capacidad para manejar problemas no lineales mediante el
+                            uso de funciones kernel. Sin embargo, también presentan algunos inconvenientes como su
+                            alto costo computacional, su sensibilidad a los parámetros o su dificultad para
+                            interpretar los resultados.</p>
+                        <p class="text-justify">La regresión por vectores soporte (SVR) es una extensión de las SVM para
+                            problemas
+                            de regresión. La SVR consiste en encontrar una función que aproxime lo mejor posible
+                            los valores observados con una tolerancia al error definida por un parámetro llamado
+                            épsilon. La SVR busca minimizar una función objetivo que combina el error cuadrático
+                            medio con una penalización por la complejidad del modelo.</p>
+                        <p class="text-justify">La SVR ha demostrado ser una herramienta eficaz para estimar funciones
+                            reales a partir
+                            de datos ruidosos o incompletos. La SVR se ha aplicado con éxito a problemas como
+                            la predicción del <a
+                                href="https://www.sciencedirect.com/science/article/abs/pii/S036054421731424X">precio
+                                del petróleo</a>,
+                            la estimación del <a
+                                href="https://www.sciencedirect.com/science/article/abs/pii/S0378778815000550">consumo
+                                energético</a>
+                            o la modelización del <a
+                                href="https://www.sciencedirect.com/science/article/abs/pii/S0968090X14000332">tráfico
+                                urbano</a>.
+                        </p>
+                        <h2>Redes Neuronales Artificiales</h2>
+                        <p class="text-justify">
+                            Las redes neuronales artificiales (RNA) son modelos computacionales inspirados en el
+                            funcionamiento del cerebro humano, que pueden aprender de los datos y adaptarse a diferentes
+                            condiciones. Las RNA han demostrado ser eficaces para la predicción de series de tiempo, ya
+                            que
+                            pueden capturar las complejidades y no linealidades inherentes a este tipo de datos. Sin
+                            embargo, las RNA también presentan algunos desafíos, como el sobreajuste, la selección de la
+                            arquitectura óptima y el tratamiento adecuado de la dependencia temporal.
+                        </p>
+                        <p class="text-justify">
+                            En los últimos años, se han propuesto diversas técnicas para mejorar el rendimiento y la
+                            robustez de las RNA para la predicción de series de tiempo enfocada a la energía eléctrica.
+                            Algunas de estas técnicas son:
+                        </p>
+                        <ul>
+                            <li>
+                                El uso de <a
+                                    href="https://comunidad.udistrital.edu.co/revistavinculos/files/2013/11/Pronostico-de-series-de-tiempo-con-redes-neuronales18.pdf">redes
+                                    neuronales regularizadas</a>, que consisten en introducir términos adicionales en
+                                la función objetivo para penalizar los pesos excesivamente grandes o complejos y evitar
+                                el
+                                sobreajuste.
+                            </li>
+                            <li>
+                                El uso de <a
+                                    href="https://unipython.com/prediccion-con-series-temporales-con-lstm-redes-neuronales-recurrentes/">redes
+                                    neuronales recurrentes (RNR)</a>, que son capaces de procesar secuencias temporales
+                                y mantener una memoria interna que les permite recordar información relevante del
+                                pasado.
+                            </li>
+                            <li>
+                                El uso de redes neuronales recurrentes con unidades <a
+                                    href="https://unipython.com/prediccion-con-series-temporales-con-lstm-redes-neuronales-recurrentes/">LSTM
+                                    (Long Short-Term Memory)</a>, que son un
+                                tipo especializado de RNR que pueden manejar mejor las dependencias temporales a largo
+                                plazo y evitar el problema del desvanecimiento o explosión del gradiente.
+                            </li>
+                            <li>
+                                El uso de <a
+                                    href="https://drive.google.com/file/d/1_JV-cgFRBJdR-8D-hdiMFnJtpvDgKCiF/view?usp=share_link">métodos
+                                    híbridos</a> que combinan las RNA con otros modelos estadísticos clásicos para
+                                aprovechar las ventajas complementarias de cada uno.
+                            </li>
+                        </ul>
+                        <p class="text-justify">Estas técnicas han mostrado resultados prometedores en diferentes casos
+                            de estudio
+                            relacionados
+                            con la predicción de series de tiempo enfocada a la energía eléctrica, como por ejemplo:</p>
+
+                        <ul>
+                            <li>
+                                La predicción del precio <a
+                                    href="https://comunidad.udistrital.edu.co/revistavinculos/files/2013/11/Pronostico-de-series-de-tiempo-con-redes-neuronales18.pdf"></a>spot
+                                del mercado eléctrico.
+                            </li>
+                            <li>La predicción del consumo eléctrico <a
+                                    href="https://drive.google.com/file/d/1_JV-cgFRBJdR-8D-hdiMFnJtpvDgKCiF/view?usp=share_link">residencial</a>.
+                            </li>
+                            <li>La predicción del <a
+                                    href="https://unipython.com/prediccion-con-series-temporales-con-lstm-redes-neuronales-recurrentes/">flujo
+                                    solar irradiado</a></li>
+                        </ul>
+                        <p class="text-justify">Sin embargo, todavía existen retos y oportunidades para seguir avanzando
+                            en este campo.
+                            Algunos
+                            aspectos que se podrían explorar son:</p>
+
+                        <ul>
+                            <li>El uso de técnicas más avanzadas para el preprocesamiento y <a
+                                    href="https://comunidad.udistrital.edu.co/revistavinculos/files/2013/11/Pronostico-de-series-de-tiempo-con-redes-neuronales18.pdf">selección
+                                    de variables</a>.</li>
+                            <li>El uso de métodos más sofisticados para <a
+                                    href="https://drive.google.com/file/d/1_JV-cgFRBJdR-8D-hdiMFnJtpvDgKCiF/view?usp=share_link">evaluar
+                                    el rendimiento y la incertidumbre</a>.</li>
+                            <li>El uso de <a
+                                    href="https://unipython.com/prediccion-con-series-temporales-con-lstm-redes-neuronales-recurrentes/">arquitecturas
+                                    más profundas o complejas</a></li>
+                            <li>El uso de <a
+                                    href="https://unipython.com/prediccion-con-series-temporales-con-lstm-redes-neuronales-recurrentes/">datos
+                                    más diversos o granulares</a>.</li>
+                        </ul>
+
+                        <h3>Métricas de medición de rendimiento de los modelos</h3>
+
+                    </div>
+                    <div class=tab-pane fade id=modelos role=tabpanel aria-labelledby=modelos-tab>
+                        <h2>Support Vector Regression</h2>
+                        <p class="text-justify">un support vector regression (SVR) es una máquina de aprendizaje que usa
+                            funciones llamadas kernels para estimar el valor de una función real a partir de unos datos.
+                            Un SVR trata de encontrar la mejor curva que se ajuste a los datos y que tenga el menor
+                            error posible. Además, un SVR controla el margen y el número de vectores soporte, que son
+                            los puntos más cercanos a la curva y que determinan su forma.</p>
+                        <p class="text-justify">
+                            Cuando un SVR se usa para predecir series de tiempo, lo que hace es usar los datos pasados
+                            como entrada y tratar de predecir el valor futuro de la serie. Por ejemplo, si tenemos una
+                            serie de tiempo que representa las ventas mensuales de una empresa, podemos usar un SVR para
+                            estimar cuánto venderá la empresa en el próximo mes basándonos en los meses anteriores.</p>
+                        <p class="text-justify">
+                            Un SVR es como un artista que dibuja una línea suave y precisa que pasa por los puntos más
+                            importantes de una gráfica y que trata de anticipar cómo seguirá la línea en el futuro</p>
+
+                        <ul>
+                            <li>
+                                El kernel es una función que transforma los datos de entrada en un espacio de mayor
+                                dimensión donde se pueda encontrar una mejor curva que se ajuste a los datos. Existen
+                                diferentes tipos de kernels, como el lineal, el polinomial y el RBF (radial basis
+                                function), que tienen diferentes formas y propiedades.
+                            </li>
+                            <li>
+                                El valor C es un parámetro que controla el equilibrio entre la complejidad de la curva y
+                                el error de ajuste. Un valor alto de C significa que se busca una curva más precisa que
+                                pase por la mayoría de los puntos, pero que puede ser más compleja y propensa al
+                                sobreajuste. Un valor bajo de C significa que se busca una curva más simple que tenga un
+                                mayor margen de error, pero que puede ser más generalizable y robusta.
+                            </li>
+                            <li>
+                                El valor epsilon es otro parámetro que controla el ancho de la banda alrededor de la
+                                curva donde no se penaliza el error. Un valor alto de epsilon significa que se acepta un
+                                mayor error en la predicción sin afectar a la curva. Un valor bajo de epsilon significa
+                                que se busca una predicción más exacta y se penaliza más el error.
+                                <div class="text-center">
+                                    <img style="width: 70%;" src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*BunsGiCZCPAHzp33L2lCBA.png" alt="">
+                                </div>
+                            </li>
+                            <li>
+                                El valor lambda es un parámetro que controla la regularización del modelo, es decir, la
+                                penalización por la complejidad del modelo. Un valor alto de lambda significa que se
+                                busca reducir la complejidad del modelo y evitar el sobreajuste. Un valor bajo de lambda
+                                significa que se busca aumentar la complejidad del modelo y ajustarse mejor a los datos.
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <div class=tab-pane fade id=contacto role=tabpanel aria-labelledby=contacto-tab>Aquí puedes poner
+                        información sobre cómo contactarte.</div>
+                </div>
+
+            </div> <!-- col-12 -->
+        </div> <!-- row -->
+    </div> <!-- container -->
 </div>
 {% endblock %}

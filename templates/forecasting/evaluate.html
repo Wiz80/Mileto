@@ -1,0 +1,82 @@
+{% extends "header.html" %}
+{% load static %}
+{% block content %}
+<div class="content_data_page">
+    <div class="evaluate-models d-flex align-items-center justify-content-center vh-100">
+        <div class="w-50">
+            <h3 class="text-start mb-4">Evaluación de modelos</h3>
+            <form action="{% url 'evaluate'%}" method="POST">
+                {% csrf_token %}
+                <p class="w-100">Se recomienda que escojas periodos no más largos de una semana para que el tiempo de
+                    ejecución de los procesos sea corto y pueda obtener resultados de forma más rápida</p>
+                <label class="w-100" for="">Seleccione el mercado de comercialización</label>
+                <select class="w-100" name="mc">
+                    {% for mc in MCModel %}
+                    <option value="{{mc}}">{{mc}}</option>
+                    {% endfor %}
+                </select>
+                <label class="w-100">Latitud</label>
+                <input class="w-100" type="number" step="0.01" name="latitud" />
+                <label class="w-100">Longitud</label>
+                <input class="w-100" type="number" step="0.01" name="longitud" />
+                <label for="fecha-inicio" class="form-label">Fecha de inicio:</label>
+                <input type="date" class="form-control" id="fecha-inicio" name="fecha-inicio">
+                <label for="fecha-fin" class="form-label">Fecha de fin:</label>
+                <input type="date" class="form-control" id="fecha-fin" name="fecha-fin">
+                <div class="d-flex justify-content-center" style="margin-top:10%;">
+                    <button type="submit">
+                        <img src="{% static 'images/Evaluar.png'%}" alt="play" style="width:70%;">
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="{% static 'js/draw_evaluate_time_series.js' %}"></script>
+    <script>
+        function call_results(){
+            const results_container = document.getElementById('results');
+            results_container.style.display = 'block';
+            var data = JSON.parse('{{ predictions|escapejs }}');
+            var names = {{ modelNames|safe }};
+            plotTimeSeries(data, names, '{{best}}','{{min}}', '{{max}}', '{{inicio}}', '{{final}}')
+        }
+    </script>
+    <div class="row w-100" id="results" style="display:none;">
+        <h4>Resultados de evaluación</h4>
+        <div class="w-100" id='plot'><!-- Plotly chart will be drawn inside this DIV --></div>
+        <div class="w-100" id='plot2'></div>
+        <div class="table-desviaciones">
+            <table class="table metrics w-50">
+                <thead class="tablehead">
+                    <tr>
+                        <th>Desviación modelo {{best}}</th>
+                        <th>Desviación MC</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    {% for idx, desviacion in desviaciones.iterrows %}
+                        
+                        {% if desviacion.model > 0.01 %}
+                        <td class="tg-bgtg" style="background:#FF69AF;">{{desviacion.model}}</td>
+                        {% else %}
+                        <td class="tg-bgtg">{{desviacion.model}}</td>
+                        {% endif %}
+                        {% if desviacion.MC > 0.01 %}
+                        <td class="tg-bgtg"  style="background:#FF69AF;">{{desviacion.MC}}</td>
+                        {% else %}
+                        <td class="tg-bgtg">{{desviacion.MC}}</td>
+                        {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table> 
+        </div>
+    </div>
+    {% if predictions %}
+        <script>
+            call_results()
+        </script>
+    {% endif %}
+</div>
+{% endblock %}

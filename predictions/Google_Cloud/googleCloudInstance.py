@@ -1,8 +1,8 @@
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
-from pydrive2.files import FileNotUploadedError
+import pickle
 import os
-from datetime import datetime
+import json
 
 class Google_Cloud_Drive():
 
@@ -13,7 +13,8 @@ class Google_Cloud_Drive():
 
     def find_credenciales(self):
         directorio_credenciales = 'credentials_module.json'
-        path_to_credenciales = 'C:\\Users\\pc\\Desktop\\Python\\Tesis\\Mileto\\predictions\\Google_Cloud\\'
+        #path_to_credenciales = 'C:\\Users\\pc\\Desktop\\Python\\Tesis\\Mileto\\predictions\\Google_Cloud\\'
+        path_to_credenciales = 'C:\\Users\\003468661\\Documents\\Harry\\Mileto\\predictions\\Google_Cloud\\'
         return self.find(directorio_credenciales, path_to_credenciales)
 
     def login(self):
@@ -77,7 +78,6 @@ class Google_Cloud_Drive():
 
 
     def busca(self,query):
-        resultado = []
         credenciales = self.login()
         # Archivos con el nombre 'mooncode': title = 'mooncode'
         # Archivos que contengan 'mooncode' y 'mooncoders': title contains 'mooncode' and title contains 'mooncoders'
@@ -87,27 +87,29 @@ class Google_Cloud_Drive():
         # Archivos que se llamen 'mooncode' y no esten en el basurero: title = 'mooncode' and trashed = false
         lista_archivos = credenciales.ListFile({'q': query}).GetList()
         for f in lista_archivos:
-            # ID Drive
-            print('ID Drive:',f['id'])
-            # Link de visualizacion embebido
-            print('Link de visualizacion embebido:',f['embedLink'])
-            # Link de descarga
-            print('Link de descarga:',f['downloadUrl'])
-            # Nombre del archivo
-            print('Nombre del archivo:',f['title'])
-            # Tipo de archivo
-            print('Tipo de archivo:',f['mimeType'])
-            # Esta en el basurero
-            print('Esta en el basurero:',f['labels']['trashed'])
-            # Fecha de creacion
-            print('Fecha de creacion:',f['createdDate'])
-            # Fecha de ultima modificacion
-            print('Fecha de ultima modificacion:',f['modifiedDate'])
-            # Version
-            print('Version:',f['version'])
-            # Tamanio
-            print('Tamanio:',f['fileSize'])
-            
+            try: 
+                # ID Drive
+                print('ID Drive:',f['id'])
+                # Link de visualizacion embebido
+                print('Link de visualizacion embebido:',f['embedLink'])
+                # Link de descarga
+                print('Link de descarga:',f['downloadUrl'])
+                # Nombre del archivo
+                print('Nombre del archivo:',f['title'])
+                # Tipo de archivo
+                print('Tipo de archivo:',f['mimeType'])
+                # Esta en el basurero
+                print('Esta en el basurero:',f['labels']['trashed'])
+                # Fecha de creacion
+                print('Fecha de creacion:',f['createdDate'])
+                # Fecha de ultima modificacion
+                print('Fecha de ultima modificacion:',f['modifiedDate'])
+                # Version
+                print('Version:',f['version'])
+                # Tamanio
+                print('Tamanio:',f['fileSize'])
+            except:
+                pass    
             return f['id']
         
 
@@ -124,24 +126,38 @@ class Google_Cloud_Drive():
         archivo.Upload(param={'supportsTeamDrives': True})
         #Al mover un archivo este conserva el id
     
+    def listar_folder(self, id_folder):
+        credenciales = self.login()
+        # Crear una lista para almacenar los nombres de los archivos
+        file_list = []
 
-if __name__ == '__main__':
-    """
-    id_archivo = '1ZVorkxDwn56Zgfh9FPlfkEtV92Nz3tmb'
-    id_folder = '17BskLL0bgyjnsTTsXv6OkuXASzyylej7'
-    """
-    today = datetime.now()
-    year = today.year
-    month = today.month
-    day = today.day
-    hour = today.hour  
-    SVRFilename = f'static/models/SVR_{day}_{month}_{year}_{hour}.sav'
-    print(SVRFilename)
-    """
-    GCInstance = Google_Cloud_Drive()
-    query = "title = 'SVR_model.sav'"
-    id = GCInstance.busca(query)
-    id_folder = '17BskLL0bgyjnsTTsXv6OkuXASzyylej7'
-    print(id)
-    GCInstance.mover_archivo(id, id_folder)
-    """
+        # Obtener la lista de archivos de la carpeta
+        file_items = credenciales.ListFile({'q': f"'{id_folder}' in parents and trashed = false"}).GetList()
+
+        # Agregar los nombres de los archivos a la lista
+        for file_item in file_items:
+            file_list.append(file_item['title'])
+        
+        return file_list
+    
+    def getMetadata(self, id_file):
+        credenciales = self.login()
+        file = credenciales.CreateFile({'id': id_file})
+        # Leer el contenido del archivo como un string
+        json_content = file.GetContentString()
+        # Cargar el contenido del archivo como un objeto de Python utilizando el módulo json
+        json_obj = json.loads(json_content)
+        # Acceder a los datos en el objeto JSON
+        return json_obj
+    
+    def getModel(self, idModel):
+        credenciales = self.login()
+        # Obtenemos el archivo del modelo desde Google Drive
+        archivo = credenciales.CreateFile({'id': idModel})
+        archivo.GetContentFile('modelo.pickle')
+
+        # Cargamos el modelo desde el archivo
+        with open('modelo.pickle', 'rb') as f:
+            modelo = pickle.load(f)
+
+        return modelo

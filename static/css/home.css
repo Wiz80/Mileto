@@ -22,13 +22,20 @@
     --f1: 'SF Pro Display', sans-serif;
 }
 
-.introduccion h1 {
-    background: -webkit-linear-gradient(var(--b2), #774dbe );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+
+.content_data_page .container .home-row{
+    width: 100%;
 }
 
-.content_data_page .introduccion{
-    padding-top: 5%;
-    width: 80%;
-}
+.nav-tabs .nav-link {
+    color: #575757; /* Color gris para los tabs por defecto */
+    font-size: var(--medi-small);
+    font-weight: 500;
+  }
+  
+  .nav-tabs .nav-link.active {
+    background-color: var(--bl1);
+    color: var(--w1); /* Color azul para el tab activo */
+    font-size: var(--medi-small);
+    font-weight: bold;
+  }

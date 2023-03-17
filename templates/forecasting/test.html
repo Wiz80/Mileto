@@ -11,54 +11,145 @@
             SVR_box.style.display = 'none';
         }
     }
+    function callInput(){
+        const fileToUploadExcel = document.getElementById('demand-file-xlsx');
+        fileToUploadExcel.click();
+    }
+    var inputArchivo = document.getElementById('filePredictors');
+    inputArchivo.addEventListener('input', function() {
+        var nombreArchivo = document.getElementById('nombre-archivo');
+        var archivo = inputArchivo.files[0];
+        nombreArchivo.innerHTML = archivo.name;
+    });
 </script>
 <div class="content_data_page">
-    <div class="row">
-        <div class="col">
-            <h1>Obtener predicciones</h1>
-            <div class="predictions">
-                <form action="{% url 'predictions'%}" method = "POST">
-                    {% csrf_token %}
-                    {% if error %}
-                    <div class="option_div warning">
-                        <span>{{error}}</span>
-                    </div>  
-                    {% endif %}
-                    <div class="option_div">
-                        <label class="w-100">Seleccione el modelo de predicción</label>
-                        <select name = "fuente" class="form-select" id="select-model" onchange="ChangeOnModel();">
-                            <option value="1">Support Vector Regression</option>
-                            <option value="2">Artificial Neural Networks</option>
-                        </select>
-                    </div>
-                    <div class="option_model" id="SVR_model">
-                        <label class="w-100">Seleccione el Mercado de comercialización</label>
-                        <select name = "fuente" class="form-select" id="select-MC">
-                            <option value="1">MC-Cali</option>
-                        </select>
-                        <p  class="text-center" style="font-weight: bold;">¿No encuentras el mercado de comercialización para modelo seleccionado?</p>
-                        <p  class="text-center" style="font-weight: bold;">Entrenalo <a href="#">aquí</a></p>
-                    </div>
-                    <div class="buttons">
-                        <div class="row">
-                            <div class="col d-flex justify-content-center">
-                                <img src="{% static 'images/download.svg'%}" alt="download">
-                            </div>
-                            <div class="col d-flex justify-content-center">
-                                <button type="submit">
-                                    <img src="{% static 'images/play.svg'%}" alt="play">
-                                </button>
+    <div class="test_page">
+        <div class="row">
+            <div class="col">
+                <h2>Obtener predicciones</h2>
+                <div class="predictions">
+                    <form action="{% url 'predictions'%}" method = "POST">
+                        {% csrf_token %}
+                        {% if error %}
+                        <div class="option_div testing warning">
+                            <span>{{error}}</span>
+                        </div>  
+                        {% endif %}
+                        <div class="option_div testing">
+                            <label class="w-100">Seleccione el modelo de predicción</label>
+                            <select name = "fuente" class="form-select" id="select-model" onchange="ChangeOnModel();">
+                                <option value="1">Support Vector Regression</option>
+                                <option value="2">Artificial Neural Networks</option>
+                            </select>
+                        </div>
+                        <div class="option_div testing" id="SVR_model">
+                            <label class="w-100">Seleccione el modelo pre-entrenado</label>
+                            <select name = "modelSelected" class="form-select" id="select-MC">
+                                {% for modelo in listaModelos %}
+                                    <option value = {{modelo}}>{{ modelo }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="option_div testing">
+                            <label class="w-100">Escoja el periodo de testeo del modelo</label>
+                            <select name = "periodo" class="form-select" id="select-periodo">
+                                <option value="1">Próximas 24 horas</option>
+                                <option value="3">Próximos 3 días</option>
+                                <option value="7">Próximos 7 días</option>
+                            </select>
+                        </div>
+                        <div class="option_div testing">
+                            <p  class="text-center" style="font-weight: bold;">¿Quieres entrenar un nuevo modelo de predicción?</p>
+                            <p  class="text-center" style="font-weight: bold;">Entrenalo <a href="{% url 'train'%}">aquí</a></p>
+                        </div>
+                        <div class="buttons">
+                            <div class="row">
+                                <div class="col d-flex justify-content-center">
+                                    <img src="{% static 'images/download.svg'%}" alt="download">
+                                </div>
+                                <div class="col d-flex justify-content-center">
+                                    <button type="submit">
+                                        <img src="{% static 'images/play.svg'%}" alt="play">
+                                    </button>
+                                </div>
                             </div>
                         </div>
+                    </form>
+                </div>
+            </div>
+            {%if metadata %}
+            <div class="col-7 col-metadata overflow-auto" style="max-height: 90vh">
+                <form method="post" action="{% url 'test' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div style="display:none;">
+                        <input type="hidden" name="input-metadata" value="{{metadataJson}}">
+                    </div>
+                    <div class="metadata-table mx-auto">
+                        <h2>Metadata del modelo</h2>
+                        <table class="table text-center">
+                            <thead>
+                            <tr>
+                                <th scope="col">Parámetro</th>
+                                <th scope="col">Valor</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for key, value in metadata.items %}
+                                {% if key != 'minMaxValues' %}
+                                <tr>
+                                <td>{{ key }}</td>
+                                <td>{{ value }}</td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>                         
+                    </div> 
+                    <input style="display: none;" type="text" name="periodo" value="{{period}}">
+                    <input style="display: none;" type="text" name="modelName" value="{{modelName}}">
+                    <h3>Digite los predictores de demanda</h3>
+                    <p>Descargue la plantilla de google sheets y digite la información de demanda necesaria para testear el modelo, una vez llena la plantilla importe el archivo .xlsx</p>
+                    <div class="row">
+                        <div class="col">
+                            <a href="https://docs.google.com/spreadsheets/d/1KUMoHjPHjbsRNOd1QEQ5xj8fyd0crNHZDDOsxiOTmgU/edit?usp=sharing" target="_blank">
+                                <img class="mx-auto d-block" src="{% static 'images/predictores.png'%}" alt="predictor-button">
+                            </a>
+                        </div>
+                        <div class="col d-flex justify-content-center">
+                            <input type="file" id="demand-file-xlsx" name="filePredictors" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display:none;" onchange="changeName();">
+                            <img class="mx-auto d-block subir-predictores" src="{% static 'images/Subir-predictores.png'%}" alt="subir-predictores-button" onclick="callInput();">
+                            <p id="nombre-archivo"></p>
+                        </div>
+                    </div>
+                    <div class="col test-button d-flex justify-content-center">
+                        <button type="submit">
+                            <img src="{% static 'images/test.png'%}" alt="play">
+                        </button>
                     </div>
                 </form>
             </div>
+            {% endif %}
         </div>
-        <div class="col">
-            <div class="predictions">
-                <h2>HOLA MUNDO</h2>
-            </div>
+        <script type="text/javascript" src="{% static 'js/draw_test_time_series.js' %}"></script>
+        {% with inicio=inicio final=final min=min max=max%}
+        <script>
+            function call_results(){
+                const results_container = document.getElementById('results');
+                results_container.style.display = 'block';
+                var data = JSON.parse('{{ data|escapejs }}');
+                plotTestTimeSeries(data, '{{min}}', '{{max}}', '{{inicio}}', '{{final}}')
+            }
+        </script>
+        {% endwith %}
+        <div class="row resultados" id="results" style="display:none;">
+            <h4>Resultados de entrenamiento</h4>
+            <div id='plot'><!-- Plotly chart will be drawn inside this DIV --></div>
         </div>
+        {% if data %}
+        <script>
+            call_results()
+        </script>
+    {% endif %}
     </div>
 </div>
 {% endblock %}

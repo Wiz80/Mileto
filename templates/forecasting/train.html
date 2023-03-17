@@ -2,28 +2,29 @@
 {% load static %}
 {% block content %}
 <div class="content_data_page">
-    <div class="formulario">
+    <div class="formulario" style="overflow-x: auto;">
         <form action="{% url 'train'%}" method="POST">
             {% csrf_token %}
             <div class="row">
-                <h1>Entrenar modelo</h1>
+                <h2>Entrenar modelo</h3>
                 <div class="col">
                     <div class="option_div">
-                        <h3>Mercado de comercialización</h3>
+                        <h4>Mercado de comercialización</h4>
                         <select class="w-50" name="mc">
-                            <option value="MC-Cali">MC-Cali</option>
-                            <option value="2">ANN</option>
+                            {% for mc in MCModel %}
+                                <option value="{{mc}}">{{mc}}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="option_div">
-                        <h3>Modelo de entrenamiento</h3>
+                        <h4>Modelo de entrenamiento</h4>
                         <select class="w-50", name = "model">
                             <option value="SVR">SVR</option>
                             <option value="ANN">ANN</option>
                             </select>
                     </div>
                     <div class="option_div">
-                        <h3>Datos de fechas</h3>
+                        <h4>Datos de fechas</h4>
                         {% if error %}
                             <div class="option_div warning">
                                 <span>{{error}}</span>
@@ -41,14 +42,14 @@
                 </div>
                 <div class="col" style="margin-left: 2%;">
                     <div class="option_div">
-                        <h3>Seleccione coordenadas</h3>
+                        <h4>Seleccione coordenadas</h4>
                         <label class="w-100">Latitud</label>
                         <input class="w-50" type="number" step="0.01" name="latitud"/>
                         <label class="w-100">Longitud</label>
                         <input class="w-50" type="number" step="0.01" name="longitud"/>
                     </div>
                     <div class="option_div">
-                        <h3>Hiperparametros del modelo <a href="#">SVR</a></h3>
+                        <h4>Hiperparametros del modelo <a href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVR.html" target="_blank">SVR</a></h4>
                         <div class="row">
                             <div class="col">
                                 <label class="w-100">&epsilon;</label>
@@ -71,9 +72,30 @@
                         </div>
                     </div>
                 </div>
-                <div class="col">
+                <div class="col" style="margin-left: 5%;">
                     <div class="option_div">
-                        <h3>Predictores de demanda</h3>
+                        <h4>Predictores temporales</h4>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="dayHour" checked/>
+                            <label for="dayHour" class="form-check-label">
+                                Hora del día
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="dayOfTheWeek" checked />
+                            <label class="form-check-label" for="dayOfTheWeek">
+                                Día de la semana
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="festDay"checked />
+                            <label class="form-check-label" for="festDay">
+                                Indicadores de festivos y fines de semana
+                            </label>
+                        </div>
+                    </div>
+                    <div class="option_div">
+                        <h4>Predictores de demanda</h4>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="24_HRS" checked id="24-HRS"/>
                             <label for="24_HRS" class="form-check-label">
@@ -93,8 +115,10 @@
                             </label>
                         </div>
                     </div>
+                </div>
+                <div class="col">
                     <div class="option_div">
-                        <h3>Variables metereológicas por hora</h3>
+                        <h4>Variables metereológicas por hora</h4>
                         <div class="row">
                             <div class="col">
                                 <div class="form-check">
@@ -204,9 +228,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="option_div">
+                        <h4>Nombrar modelo</h4>
+                        <label class="w-100" for="model-name">Por favor digite un nombre que le quiera dar al modelo que se va a entrenar</label>
+                        <input type="text" id="model-name" name="modelName" placeholder="SVR-2023-02-25-4:20">
+                    </div>
                     <div class="button_entrenar text-center">
                         <button type="submit">
-                            <img src="{% static 'images/entrenar_1.png'%}" alt="mas" />
+                            <img src="{% static 'images/entrenar.png'%}" alt="mas" />
                         </button>
                     </div>
                 </div>
@@ -224,9 +253,9 @@
         </script>
         {% endwith %}
     </div>
-    <div class="row resultados" id="results">
-        <h1>Resultados de entrenamiento</h1>
-        <div id='plot'><!-- Plotly chart will be drawn inside this DIV --></div>
+    <div class="row resultados w-100" id="results" style="display:none;">
+        <h4>Resultados de entrenamiento</h4>
+        <div class="w-100" id='plot'><!-- Plotly chart will be drawn inside this DIV --></div>
         <table class="table metrics w-50">
             <thead class="tablehead">
                 <tr>
@@ -253,16 +282,24 @@
                 </tr>
             </tbody>
         </table>    
-        <div class="row">
+        <div class="row lastRowTrain">
             <div class="col">
                 <div class="guardar_modelo">
                     <h4>Guardar el modelo en la base de datos</h4>
-                    <p align="justify">El modelo que acaba de ser entrenado aún no ha sido guardado, sí desea que este quede en la base de datos de Mileto de click en el botón de guardar. Este quedará guardado con la inicial del nombre del tipo de entrenamiento que uso seguido de la fecha y lo hora en que se guardó</p>
+                    <p align="justify">El modelo que acaba de ser entrenado aún no ha sido guardado, sí desea que este quede en la base de datos de Mileto de click en el botón de guardar. Este quedará guardado con la inicial del nombre del tipo de entrenamiento que uso seguido de la fecha y la hora en que se guardó</p>
                     <p>Por ejemplo: 
                     </p>
-                    <p style="font-weight: bold;">SVR_02_08_2023_11:10am</p>
+                    <p style="font-weight: bold;">SVR_02_08_2023_4:20</p>
                     <div class="boton_guardar">
-                        <a href="{% url 'save_model' fileName=fileName_ %}"><img src="{% static 'images/Guardar.png'%}" alt="guardar" /></a>
+                        <form action="{% url 'save_model'%}" method="POST">
+                            {% csrf_token %}
+                            <div class="text-center">
+                                <input type="text" name="fileNameModel" value="{{fileName}}" style="display:none;">
+                                <button type="submit">
+                                    <img src="{% static 'images/Guardar.png'%}" alt="mas" />
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

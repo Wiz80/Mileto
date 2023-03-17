@@ -1,0 +1,51 @@
+{% extends "header.html" %}
+{% load static %}
+{% block content %}
+<div class="content_data_page">
+    <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
+        <div class="user-card-signup d-flex align-items-center justify-content-center">
+            <div class="content-login-card">
+                <div class="text-center">
+                    <img src="{% static 'images/mileto_login.svg'%}" alt="Logo" class="mx-auto" width="40">
+                </div>
+                <form action="{% url 'signup'%}" method="post">
+                    {% csrf_token %}
+                    <div class="col justify-content-center">
+                        <span>{{error_user}}</span>
+                    </div>
+                    <label for="username" class="w-100">Nombre de usuario</label>
+                    <input type="text" name="username" class="w-100">
+                    
+                    <label for="first_name" class="w-100">Nombres</label>
+                    <input type="text" name="first_name" class="w-100">
+                
+                    <label for="last_name" class="w-100">Apellidos</label>
+                    <input type="text" name="last_name" class="w-100">
+                
+                    <label for="email" class="w-100">E-mail</label>
+                    <input type = "email" name = "email" class="w-100">
+                
+                    <label for="password" class="w-100">Contraseña</label>
+                    <input type="password" name="password" class="w-100">
+                
+                    <div class="text-center">
+                        {% if error_pass %}
+                            <p style="color:#F1515F" style="width: 300px;">Mínimo 8 caracteres incluyendo minúscula, mayúscula y un número. No repitas el mismo carácter más de 3 veces</p>
+                        {% else %}
+                            <p style="width: 300px;">Mínimo 8 caracteres incluyendo minúscula, mayúscula y un número. No repitas el mismo carácter más de 3 veces</p>
+                        {% endif %}
+                        <br>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit">
+                            <img src="{% static 'images/Signup.png'%}" alt="" width="140">
+                        </button>
+                    </div>
+                </form>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

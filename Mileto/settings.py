@@ -33,6 +33,9 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'miletoapp.apps.MiletoappConfig',
     'predictions.apps.PredictionsConfig',
+    'miletousers.apps.MiletousersConfig',
+    'datos.apps.DatosConfig',
+    'evaluate.apps.EvaluateConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -128,3 +131,6 @@ STATICFILES_DIRS = (str(BASE_DIR.joinpath('static')),)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_URL='miletoLogin'
+LOGIN_REDIRECT_URL='miletoLogin'

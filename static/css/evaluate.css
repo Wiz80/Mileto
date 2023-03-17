@@ -1,0 +1,15 @@
+.content_data_page .evaluate-models input{
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+
+.content_data_page .row .table-desviaciones{
+    height: 30%;
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+
+.content_data_page .row .table-desviaciones table{
+    height: 30%;
+    overflow-y: scroll;
+}
