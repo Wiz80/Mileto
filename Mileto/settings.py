@@ -82,11 +82,12 @@ WSGI_APPLICATION = 'Mileto.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': "mileto",
         'HOST': "localhost",
         'USER': "postgres",
-        'PASSWORD': "PosSql2680Hax"
+        'PASSWORD': "PosSql2680Hax",
+        'PORT': '',
     }
 }
 
@@ -131,6 +132,7 @@ STATICFILES_DIRS = (str(BASE_DIR.joinpath('static')),)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,  'staticfiles')
 
 LOGIN_URL='miletoLogin'
 LOGIN_REDIRECT_URL='miletoLogin'
