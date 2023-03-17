@@ -14,7 +14,7 @@ class Google_Cloud_Drive():
     def find_credenciales(self):
         directorio_credenciales = 'credentials_module.json'
         #path_to_credenciales = 'C:\\Users\\pc\\Desktop\\Python\\Tesis\\Mileto\\predictions\\Google_Cloud\\'
-        path_to_credenciales = 'C:\\Users\\003468661\\Documents\\Harry\\Mileto\\predictions\\Google_Cloud\\'
+        path_to_credenciales = 'C:\\Users\\STLF_UIS\\miletoproject\\Mileto\\predictions\\Google_Cloud'
         return self.find(directorio_credenciales, path_to_credenciales)
 
     def login(self):
