@@ -45,32 +45,83 @@
         <h4>Resultados de evaluación</h4>
         <div class="w-100" id='plot'><!-- Plotly chart will be drawn inside this DIV --></div>
         <div class="w-100" id='plot2'></div>
-        <div class="table-desviaciones">
-            <table class="table metrics w-50">
-                <thead class="tablehead">
-                    <tr>
-                        <th>Desviación modelo {{best}}</th>
-                        <th>Desviación MC</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    {% for idx, desviacion in desviaciones.iterrows %}
-                        
-                        {% if desviacion.model > 0.01 %}
-                        <td class="tg-bgtg" style="background:#FF69AF;">{{desviacion.model}}</td>
-                        {% else %}
-                        <td class="tg-bgtg">{{desviacion.model}}</td>
-                        {% endif %}
-                        {% if desviacion.MC > 0.01 %}
-                        <td class="tg-bgtg"  style="background:#FF69AF;">{{desviacion.MC}}</td>
-                        {% else %}
-                        <td class="tg-bgtg">{{desviacion.MC}}</td>
-                        {% endif %}
+        <div class="row">
+            <div class="col">
+                <div class="table-container text-center" style="max-height: 300px;">
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="tg-c3ow" colspan="2">MAPE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="tg-c3ow">Pronosticador</td>
+                            <td class="tg-c3ow">Error</td>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table> 
+                        {% for model, value in MAPEs.items %}
+                        <tr>
+                        <td class="tg-0lax">{{model}}</td>
+                        <td class="tg-0lax">{{value}}</td>
+                        </tr>
+                        {% endfor %}    
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="table-container text-center" style="max-height: 300px;">
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="tg-c3ow" colspan="4">Desviaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="tg-c3ow" colspan="2">CREG 025 1995</td>
+                            <td class="tg-c3ow" colspan="2">CREG 100 2019</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-baqh">modelo {{best}}</td>
+                            <td class="tg-baqh">MC</td>
+                            <td class="tg-baqh">modelo {{best}}</td>
+                            <td class="tg-baqh">MC</td>
+                        </tr>
+                        <tr>
+                            {% for idx, desviacion in desviaciones.iterrows %}
+                                <tr>
+                                {% if desviacion.model > 0.05 %}
+                                <td class="tg-bgtg" style="background:#5B328A; color: rgb(239, 240, 242);">{{desviacion.model}}</td>
+                                {% else %}
+                                <td class="tg-bgtg">{{desviacion.model}}</td>
+                                {% endif %}
+                                {% if desviacion.MC > 0.05 %}
+                                <td class="tg-bgtg"  style="background: #5B328A; color: rgb(239, 240, 242);">{{desviacion.MC}}</td>
+                                {% else %}
+                                <td class="tg-bgtg">{{desviacion.MC}}</td>
+                                {% endif %}
+                                {% if desviacion.model > 0.04 %}
+                                <td class="tg-bgtg" style="background:#F80074; color: rgb(239, 240, 242);">{{desviacion.model}}</td>
+                                {% else %}
+                                <td class="tg-bgtg">{{desviacion.model}}</td>
+                                {% endif %}
+                                {% if desviacion.MC > 0.04 %}
+                                <td class="tg-bgtg"  style="background:#F80074; color: rgb(239, 240, 242);">{{desviacion.MC}}</td>
+                                {% else %}
+                                <td class="tg-bgtg">{{desviacion.MC}}</td>
+                                {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </tr>
+                            
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+            </div>
         </div>
     </div>
     {% if predictions %}

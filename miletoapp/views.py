@@ -8,7 +8,7 @@ def index(request):
     return render(request, 'home.html')
 
 def gettingStarted(request):
-    return render(request, 'mileto_start\getting_started.html')
+    return render(request, 'mileto_start/getting_started.html')
 
 
 # Create your views here.

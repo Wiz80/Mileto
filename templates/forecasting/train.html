@@ -286,10 +286,7 @@
             <div class="col">
                 <div class="guardar_modelo">
                     <h4>Guardar el modelo en la base de datos</h4>
-                    <p align="justify">El modelo que acaba de ser entrenado aún no ha sido guardado, sí desea que este quede en la base de datos de Mileto de click en el botón de guardar. Este quedará guardado con la inicial del nombre del tipo de entrenamiento que uso seguido de la fecha y la hora en que se guardó</p>
-                    <p>Por ejemplo: 
-                    </p>
-                    <p style="font-weight: bold;">SVR_02_08_2023_4:20</p>
+                    <p align="justify">El modelo que acaba de ser entrenado aún no ha sido guardado, sí desea que este quede en la base de datos de Mileto de click en el botón de guardar.</p>
                     <div class="boton_guardar">
                         <form action="{% url 'save_model'%}" method="POST">
                             {% csrf_token %}

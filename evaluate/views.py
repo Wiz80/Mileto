@@ -73,9 +73,10 @@ def evaluateModels(request):
         predictions['OFI'] = list(ofi['demand'])
         
         #Obtener el modelo con mejor MAPE
-        MAPEs = [MAPE(predictions['realDemand'], predictions[name]) for name in listModels] 
-        _, idxMinMAPE = min(enumerate(MAPEs), key=lambda x: x[1])
+        MAPEs = {name: round(MAPE(predictions['realDemand'], predictions[name]),4) for name in listModels} 
+        _, idxMinMAPE = min(enumerate(MAPEs.values()), key=lambda x: x[1])
         bestModel = listModels[int(idxMinMAPE)]
+        MAPEs['MC'] = round(MAPE(predictions['realDemand'], predictions['OFI']),4)
 
         desviaciones = pd.DataFrame({
         'model':[np.abs(predictions[bestModel][idx]-realVal)/realVal for idx, realVal in enumerate(predictions['realDemand'])],
@@ -100,7 +101,8 @@ def evaluateModels(request):
             'final': list(weatherData['time'])[-1],
             'modelNames': listModels,
             'best': bestModel,
-            'desviaciones': desviaciones
+            'desviaciones': desviaciones,
+            'MAPEs': MAPEs
         })
 
 

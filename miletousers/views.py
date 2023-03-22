@@ -16,10 +16,10 @@ def miletoLogin(request):
             return redirect('home')
         else:
             return render(request, 
-                         'users\login.html', 
+                         'users/login.html', 
                          {'error': 'La combinación de usuario y contraseña no es correcta.'})
 
-    return render(request, 'users\login.html')
+    return render(request, 'users/login.html')
 
 def miletoSignUp(request):
     if request.method == 'POST':
@@ -50,4 +50,4 @@ def miletoSignUp(request):
 
         return redirect('home')
     
-    return render(request, 'users\signup.html')
+    return render(request, 'users/signup.html')

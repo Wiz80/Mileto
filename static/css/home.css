@@ -34,7 +34,7 @@
   }
   
   .nav-tabs .nav-link.active {
-    background-color: var(--bl1);
+    background: var(--bl1);
     color: var(--w1); /* Color azul para el tab activo */
     font-size: var(--medi-small);
     font-weight: bold;

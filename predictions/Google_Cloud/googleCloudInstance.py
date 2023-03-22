@@ -1,5 +1,6 @@
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
+from django.conf import settings
 import pickle
 import os
 import json
@@ -10,11 +11,10 @@ class Google_Cloud_Drive():
         for root, dirs, files in os.walk(path):
             if name in files:
                 return os.path.join(root, name)
-
+    
     def find_credenciales(self):
         directorio_credenciales = 'credentials_module.json'
-        #path_to_credenciales = 'C:\\Users\\pc\\Desktop\\Python\\Tesis\\Mileto\\predictions\\Google_Cloud\\'
-        path_to_credenciales = 'C:\\Users\\STLF_UIS\\miletoproject\\Mileto\\predictions\\Google_Cloud'
+        path_to_credenciales = os.path.join(settings.BASE_DIR, 'predictions', 'Google_Cloud')
         return self.find(directorio_credenciales, path_to_credenciales)
 
     def login(self):

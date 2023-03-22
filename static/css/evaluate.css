@@ -3,13 +3,23 @@
     font-weight: 500;
 }
 
-.content_data_page .row .table-desviaciones{
-    height: 30%;
+.content_data_page .row .table-container{
+    overflow-y: auto;
     font-size: var(--medi-small);
     font-weight: 500;
 }
 
-.content_data_page .row .table-desviaciones table{
-    height: 30%;
-    overflow-y: scroll;
+.content_data_page .row .table-container::-webkit-scrollbar {
+    width: 0.7em;
+    background-color: #F5F5F5;
+}
+   
+.content_data_page .row .table-container::-webkit-scrollbar-thumb {
+    background-color: var(--gr3);
+    border-radius: 10px;
+}
+   
+.content_data_page .row .table-container::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
 }

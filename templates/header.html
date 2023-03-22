@@ -24,14 +24,14 @@
         <div class="btn-group-vertical" role="group" aria-label="Basic example">
               <a href="{% url 'home'%}">
                 <button title="Home" class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">
-                  <img src="{% static 'images/physics.gif'%}" alt="Logo" class="mx-auto">
+                  <img src="{% static 'images/Home.png'%}" alt="Logo" class="mx-auto">
                 </button>
               </a> 
               {% if user.is_authenticated %}
               {% if user.is_superuser %}
                 <a href="{% url 'train'%}">
                   <button title="training" class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">
-                    <img src="{% static 'images/train-logo.svg'%}" alt="Logo" class="mx-auto">
+                    <img src="{% static 'images/Train.png'%}" alt="Logo" class="mx-auto">
                 </button>
                 </a>
               {% endif %}
@@ -42,7 +42,7 @@
               </button>
               <a href="{% url 'evaluate'%}">
                 <button title="testing" class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">
-                  <img src="{% static 'images/share.gif'%}" alt="Logo" class="mx-auto">
+                  <img src="{% static 'images/Evaluate.png'%}" alt="Logo" class="mx-auto">
               </button>
               </a>
               <a href="{% url 'data'%}">
@@ -85,7 +85,7 @@
           {% if not user.is_authenticated %}
             <a href="{% url 'miletoLogin'%}" class="text-white me-3"><i class="bi bi-person"></i></a>
           {% endif %}
-          <a href="#" class="text-white"><i class="bi bi-github"></i></a>
+          <a href="https://github.com/Wiz80" target="_blank" class="text-white"><i class="bi bi-github"></i></a>
         </div>
       </div>
     </div>

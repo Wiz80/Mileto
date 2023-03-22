@@ -1,18 +1,25 @@
 .formulario{
     height: 60%;
     width: 100%;
+    overflow-x: scroll;
 }
 
 .formulario .option_div .form-check input, label{
     font-size: var(--medi-small);
     font-weight: 500;
 }
-.content_data_page .formulario::-webkit-scrollbar-thumb {
+
+.formulario::-webkit-scrollbar {
+    height: 10px;
+    background-color: #F5F5F5;
+}
+
+.formulario::-webkit-scrollbar-thumb{
     background-color: var(--gr3);
     border-radius: 10px;
 }
 
-.content_data_page .formulario::-webkit-scrollbar-track {
+.formulario::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     background-color: #F5F5F5;
 }
@@ -48,7 +55,7 @@
 }
 
 .content_data_page .row .col .guardar_modelo .boton_guardar img{
-    width: 25%;
+    width: 40%;
 }
 
 
@@ -56,7 +63,7 @@
     text-align: center;
 }
 .content_data_page .row .col .ver_modelo .row .col img{
-    width: 50%;
+    width: 70%;
 }
 
 .content_data_page .row .col .ver_modelo .row .col{
