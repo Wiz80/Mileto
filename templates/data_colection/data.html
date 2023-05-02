@@ -29,7 +29,11 @@
                         podrá subir la cantidad de archivos .xlsx que usted quiera, esto con el objetivo de alimentar la
                         base de datos de Mileto, para más
                         información de cómo hacer este procedimiento redirigase a <a href="{% url 'home'%}"
-                            target="_blank">home</a>
+                            target="_blank">home</a>. Podrá escoger entre darle un nombre a los datos que se van a subir
+                        o también escogerlo desde la opción seleccionar mercado. Tenga en cuenta que si decide escoger
+                        un nombre para el modelo deberá subir los archivos con el mismo formato de nombre que los datos
+                        provenientes de XM. Para más información vaya a <a href="{% url 'get-started'%}">getting
+                            started</a>
 
                     </p>
                 </div>
@@ -87,6 +91,10 @@
                     </select>
                 </div>
                 <div class="option_div">
+                    <label class="w-100">Escriba un nombre para los datos</label>
+                    <input class="w-100" type="text" name="model-name">
+                </div>
+                <div class="option_div">
                     <label class="w-100">Establezca desde que fecha quiere recolectar los datos</label>
                     <input class="w-100" type="date" name="fechaInicio" placeholder="Fecha de inicio">
                 </div>
@@ -121,19 +129,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr>              
-                    {% for idx, fecha in fechasUCP.iterrows %}
+                    <tr>
+                        {% for idx, fecha in fechasUCP.iterrows %}
                         <td class="tg-bgtg">{{idx}}</td>
                         <td class="tg-bgtg">{{fecha.min}}</td>
                         <td class="tg-bgtg">{{fecha.max}}</td>
-                        </tr>
+                    </tr>
                     {% endfor %}
                 </tbody>
-            </table> 
+            </table>
             <br>
             <div class="d-flex align-items-center justify-content-center">
-                <p>Total de registros:    </p>
-                <p>   {{registros}}</p>
+                <p>Total de registros: </p>
+                <p> {{registros}}</p>
             </div>
         </div>
     </div>

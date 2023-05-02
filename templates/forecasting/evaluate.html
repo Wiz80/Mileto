@@ -7,7 +7,7 @@
             <h3 class="text-start mb-4">Evaluación de modelos</h3>
             <form action="{% url 'evaluate'%}" method="POST">
                 {% csrf_token %}
-                <p class="w-100">Se recomienda que escojas periodos no más largos de una semana para que el tiempo de
+                <p class="w-100">Se recomienda que escojas periodos no más largos de un mes para que el tiempo de
                     ejecución de los procesos sea corto y pueda obtener resultados de forma más rápida</p>
                 <label class="w-100" for="">Seleccione el mercado de comercialización</label>
                 <select class="w-100" name="mc">
@@ -57,7 +57,7 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td class="tg-c3ow">Pronosticador</td>
+                            <td class="tg-c3ow">Modelo de pronóstico</td>
                             <td class="tg-c3ow">Error</td>
                         </tr>
                         {% for model, value in MAPEs.items %}
@@ -76,43 +76,25 @@
                       <table class="table">
                         <thead>
                             <tr>
-                                <th class="tg-c3ow" colspan="4">Desviaciones</th>
+                                <th class="tg-c3ow" colspan="5">Desviaciones [MW]</th>
                             </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td class="tg-c3ow" colspan="2">CREG 025 1995</td>
-                            <td class="tg-c3ow" colspan="2">CREG 100 2019</td>
-                        </tr>
-                        <tr>
-                            <td class="tg-baqh">modelo {{best}}</td>
-                            <td class="tg-baqh">MC</td>
-                            <td class="tg-baqh">modelo {{best}}</td>
-                            <td class="tg-baqh">MC</td>
+                            <td class="tg-baqh">Resolución</td>
+                            <td class="tg-baqh">modelo {{best}} (horario)</td>
+                            <td class="tg-baqh">modelo {{best}} (diario)</td>
+                            <td class="tg-baqh">MC (horario)</td>
+                            <td class="tg-baqh">MC (diario)</td>
                         </tr>
                         <tr>
                             {% for idx, desviacion in desviaciones.iterrows %}
                                 <tr>
-                                {% if desviacion.model > 0.05 %}
-                                <td class="tg-bgtg" style="background:#5B328A; color: rgb(239, 240, 242);">{{desviacion.model}}</td>
-                                {% else %}
-                                <td class="tg-bgtg">{{desviacion.model}}</td>
-                                {% endif %}
-                                {% if desviacion.MC > 0.05 %}
-                                <td class="tg-bgtg"  style="background: #5B328A; color: rgb(239, 240, 242);">{{desviacion.MC}}</td>
-                                {% else %}
-                                <td class="tg-bgtg">{{desviacion.MC}}</td>
-                                {% endif %}
-                                {% if desviacion.model > 0.04 %}
-                                <td class="tg-bgtg" style="background:#F80074; color: rgb(239, 240, 242);">{{desviacion.model}}</td>
-                                {% else %}
-                                <td class="tg-bgtg">{{desviacion.model}}</td>
-                                {% endif %}
-                                {% if desviacion.MC > 0.04 %}
-                                <td class="tg-bgtg"  style="background:#F80074; color: rgb(239, 240, 242);">{{desviacion.MC}}</td>
-                                {% else %}
-                                <td class="tg-bgtg">{{desviacion.MC}}</td>
-                                {% endif %}
+                                <td class="tg-bgtg">{{desviacion.resolucion}}</td>
+                                <td class="tg-bgtg">{{desviacion.model.0}}</td>
+                                <td class="tg-bgtg">{{desviacion.model.1}}</td>
+                                <td class="tg-bgtg">{{desviacion.MC.0}}</td>
+                                <td class="tg-bgtg">{{desviacion.MC.1}}</td>
                                 </tr>
                             {% endfor %}
                         </tr>

@@ -1,0 +1,91 @@
+.content_data_page{
+    margin-left: 10%;
+}
+
+.content_data_page .data_page{
+    padding: 5%;
+}
+
+.content_data_page .row{
+    height: 100%;
+    width: 112%;
+    min-height: 100%;
+    padding-top: 3%;
+}
+
+.content_data_page .option_div select{
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+
+
+.form-data{
+    padding-top: 50px;
+    width:60%;
+}
+
+form .form-select option:hover{ 
+    background: var(--b) !important;
+}
+
+form .option_div{
+    padding-bottom: 5%;
+}
+
+.option_div.warning{
+    color: var(--r);
+    margin-bottom: -10px;
+    font-weight: bold;
+}
+
+.button_div {
+    width:100%;
+    display: flex;
+    justify-content: center;
+}
+
+.button_div button img{
+    width: 50px;
+}
+
+button[type="submit"]{
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+input,select, option{
+    border-radius: 8px;
+    border: 1px solid var(--gr4);
+    padding-left: 8px;
+    padding-right: 10px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: var(--medium);
+    height: 28px;
+}
+
+
+.option_div select option:hover{
+    background-color: var(--b);
+}
+
+input[type="checkbox"]{
+    padding: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+.content_data_page .row .col table{
+    font-size: var(--medi-small);
+    font-weight: 500;
+}

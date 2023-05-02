@@ -1,0 +1,71 @@
+.nav_bar{
+    padding: 0;
+    width: 8%;
+    height: 100%; /* Full height */
+    position: fixed; /* Make it stick, even on scroll */
+    overflow: auto; /* Enable scrolling if the sidenav has too much content */
+    border-right: 1px solid var(--gr2);
+}
+
+.nav_bar_options{
+    margin-left: 8%;
+    width: 8%;
+    height: 100%; /* Full height */
+    position: fixed; /* Make it stick, even on scroll */
+    overflow: auto; /* Enable scrolling if the sidenav has too much content */
+}
+
+.nav_bar_options.to_small{
+    font-size: 10px;
+}
+
+
+.nav_bar_options .collapse .list-group.data{
+    margin-top: 280%;
+}
+
+
+.logo{
+    padding-top: 38%;
+    padding-left: 25%;
+    height: 15%;
+}
+
+.logo img{
+    width:65%;
+}
+
+.home{
+    padding-top: 30%;
+    height: 70%;
+}
+
+.home .btn-group-vertical{
+    width: 100%;
+}
+
+.home .btn-group-vertical button{
+    padding-top: 20%;
+    padding-bottom: 20%;
+}
+
+.home .btn-group-vertical button img{
+    width:20%;
+    margin-left: 20%;
+}
+
+.user_login{
+    padding-left: 33.33%;
+    height: 15%;
+}
+
+.user_login img{
+    width:50%;
+}
+
+.nav_bar .user_login .username{
+    font-weight: bold; 
+    margin-left: -50%; 
+    padding-top: 40%;
+    color: -webkit-linear-gradient(#083E3A, #18FFF2);
+}

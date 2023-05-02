@@ -1,0 +1,20 @@
+.content_data_page .user-card-signup{
+    height: 90%;
+    padding-left: 2%;
+    padding-right: 2%;    
+    background: #010115;
+    color: var(--w2);
+    border-radius: 5%;
+}
+.content_data_page .user-card-signup form p, li{
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+.content_data_page .user-card-signup form label, span{
+    display: block;
+    width: 100%;
+}
+
+.content_data_page .user-card-signup input{
+    margin-bottom: 5%;
+}

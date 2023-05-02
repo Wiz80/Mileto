@@ -21,10 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '$nhj2v2-2f)bo*$e30idjkf#jb$yyw-3rb6+(k16*y)0-x&t5p'
-
+CSRF_COOKIE_HTTPONLY = False
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*']
+CSRF_COOKIE_SECURE = False
 ALLOWED_HOSTS = ['200.16.119.236','179.32.30.224','localhost', '127.0.0.1', 'db']
 
 

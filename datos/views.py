@@ -3,32 +3,41 @@ from django.shortcuts import render
 from predictions.models import Demand_Data
 from django.db.models import Subquery, OuterRef, Count
 import pandas as pd
+import numpy as np
 from datetime import datetime
 from dateutil import relativedelta
 
+
+
 def uploadXMData(MC, start, end, files):
-    delta = relativedelta.relativedelta(start, end)
-    total_months = delta.months + delta.years * 12
-    year = start.year 
-    month = start.month - 1
+    delta = relativedelta.relativedelta(end, start)
+    total_months = delta.months + (delta.years * 12)
+    year = end.year 
+    month = end.month - 1
     name_months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
     name_months_2 = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
     column_names = ['UCP','Variable','FECHA','TIPO_DIA','Total']
+    print(total_months)
     for _ in range(total_months):
+        notExist = False
         try:
+            nameExcelFile = f"MC-{MC}-OFI-DR-{name_months[month]} {year}-{name_months[month]} {year}.xlsx"
+            fileGetted = [file for file in files if file.name == nameExcelFile][0]
+            xls = pd.ExcelFile(fileGetted)
+        except:
             try:
-                nameExcelFile = f"MC-{MC}-OFI-DR-{name_months[month]} {year}-{name_months[month]} {year}.xlsx"
+                nameExcelFile = f"U{MC.lower()}-OFI-{name_months_2[month]} {year}-{name_months_2[month]} {year}.xlsx"
                 fileGetted = [file for file in files if file.name == nameExcelFile][0]
                 xls = pd.ExcelFile(fileGetted)
             except:
+                print(f"U{MC.lower()}-OFI-{name_months_2[month]} {year}-{name_months_2[month]} {year}.xls")
+                nameExcelFile = f"U{MC.lower()}-OFI-{name_months_2[month]} {year}-{name_months_2[month]} {year}.xls"
                 try:
-                    nameExcelFile = f"U{MC.lower()}-OFI-{name_months_2[month]} {year}-{name_months_2[month]} {year}.xlsx"
                     fileGetted = [file for file in files if file.name == nameExcelFile][0]
                     xls = pd.ExcelFile(fileGetted)
-                except:
-                    nameExcelFile = f"U{MC.lower()}-OFI-{name_months_2[month]} {year}-{name_months_2[month]} {year}.xls"
-                    fileGetted = [file for file in files if file.name == nameExcelFile][0]
-                    xls = pd.ExcelFile(fileGetted)
+                except IndexError:
+                    notExist = True
+        if not notExist:
             real = pd.read_excel(xls, 'real')
             pronostico = pd.read_excel(xls, 'pronostico')
             col_idx = 0
@@ -46,8 +55,6 @@ def uploadXMData(MC, start, end, files):
             except NameError: 
                 data_real = real 
                 data_pronostico = pronostico
-        except:
-            pass
         month -= 1
         if month == -1: 
             month = 11
@@ -74,7 +81,9 @@ def add_data(request):
 
     if request.method == 'POST':
         uploadedFiles = request.FILES.getlist('demandFiles')
-        UCP = request.POST["UPC-MC"]
+        UCP = request.POST["model-name"]
+        if UCP == '':
+            UCP = request.POST["UPC-MC"]
         fechaInicio = datetime.strptime(request.POST["fechaInicio"], "%Y-%m-%d").date()
         fechaFinal = datetime.strptime(request.POST["fechaCierre"], "%Y-%m-%d").date()
         dataReal, dataPronostico = uploadXMData(UCP, fechaFinal, fechaInicio, uploadedFiles)

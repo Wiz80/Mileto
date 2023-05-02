@@ -1,0 +1,25 @@
+.content_data_page .user-card{
+    width: 30%;
+    height: 90%;
+    border-radius: 5%;
+    background: #010115;
+    color: var(--w2);
+}
+
+.content_data_page .user-card input{
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+.content_data_page .user-card .content-login-card img{
+    margin-bottom: 50%;
+}
+
+.content_data_page .user-card .content-login-card button{
+    margin-top: 50%;
+    margin-bottom: -100%;    
+}
+.content_data_page .user-card .content-login-card a{
+    font-size: var(--medi-small);
+    font-weight: 500;
+    color: var(--w2);
+}

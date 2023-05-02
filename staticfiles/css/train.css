@@ -1,0 +1,92 @@
+.formulario{
+    height: 60%;
+    width: 100%;
+    overflow-x: scroll;
+}
+
+.formulario .option_div .form-check input, label{
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+
+.formulario::-webkit-scrollbar {
+    height: 10px;
+    background-color: #F5F5F5;
+}
+
+.formulario::-webkit-scrollbar-thumb{
+    background-color: var(--gr3);
+    border-radius: 10px;
+}
+
+.formulario::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+}
+
+.formulario .row .col .option_div select, input, label{
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+
+.formulario .row{
+    width: 140%;
+}
+
+.row.resultados{
+    width: 100%;
+}
+
+.button_entrenar {
+    margin-bottom: 5%;
+}
+
+.button_entrenar img {
+    width: 60%;
+}
+
+.row table.metrics{
+    margin: 0 auto;
+    text-align: center;
+}
+
+.content_data_page .row .col .guardar_modelo .boton_guardar{
+    text-align: center;
+}
+
+.content_data_page .row .col .guardar_modelo .boton_guardar img{
+    width: 40%;
+}
+
+
+.content_data_page .row .col .ver_modelo .row .col{
+    text-align: center;
+}
+.content_data_page .row .col .ver_modelo .row .col img{
+    width: 70%;
+}
+
+.content_data_page .row .col .ver_modelo .row .col{
+    margin-bottom: 10%;
+}
+
+.row.lastRowTrain{
+    margin-bottom: 15px;
+}
+
+.row.resultados .table{
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+
+.row .lastRowTrain{
+    font-size: var(--medi-small);
+    font-weight: 500;
+}
+
+.row .lastRowTrain .boton_guardar button{
+    width: 100%;
+}
+.js-plotly-plot .plotly .main-svg{
+    width: 100%;
+}
