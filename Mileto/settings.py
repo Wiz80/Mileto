@@ -27,7 +27,7 @@ DEBUG = True
 
 CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*']
 CSRF_COOKIE_SECURE = False
-ALLOWED_HOSTS = ['200.16.119.236','179.32.30.224','localhost', '127.0.0.1', 'db']
+ALLOWED_HOSTS = ['*','200.16.119.236','179.32.30.224','localhost', '127.0.0.1', 'db']
 
 
 # Application definition

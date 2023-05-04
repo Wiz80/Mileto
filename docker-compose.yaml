@@ -25,10 +25,10 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "89:80"
-      - "447:443"
+      - "80:80"
+      - "443:443"
     environment:
-      - SERVER_NAME=179.32.30.224 # O tu IP pública si no tienes dominio 
+      - SERVER_NAME=mileto.com.co # O tu IP pública si no tienes dominio 
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf # El archivo con tu configuración personalizada
       - static:/code/staticfiles # El mismo volumen usado por Django para servir archivos estáticos
