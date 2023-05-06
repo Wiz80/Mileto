@@ -74,22 +74,16 @@ def predictions(request):
         for demandPred in metadata['demand predictors']:
             sheet = workbook.create_sheet(demandPred)
             sheet.append(["Hora", "Demanda [MW]"])
-            if demandPred == '24_HRS':
-                # Agregar horas y demanda de energía a la hoja "Demanda_24h_anteriores"
-                for i in range(1, 25):
-                    date = (now - timedelta(hours=i))
-                    sheet.append([date.strftime("%H:%M"), ""])
-            if demandPred == '1d_bef' and '24_HRS' in metadata['demand predictors']:
-                date = now - timedelta(hours=24)
-                sheet.append([date.strftime("%Y-%m-%d %H:%M"), ""])
-            if demandPred == '1d_bef' and not '24_HRS' in metadata['demand predictors']:
-                for i in range(1, 25):
+            # Agregar horas y demanda de energía a la hoja "Demanda_24h_anteriores"
+            for i in range(periodo*24):
+                if demandPred == '24_HRS':
+                    date = (now - timedelta(hours=i+1))
+                if demandPred == '1d_bef':
                     date = (now - timedelta(hours=24+i))
-                    sheet.append([date.strftime("%H:%M"), ""])
-            if demandPred == '7d_bef':
-                for i in range(periodo*24):
+                if demandPred == '7d_bef':
                     date = now - timedelta(days=7, hours=i)
-                    sheet.append([date.strftime("%Y-%m-%d %H:%M"), ""])
+                sheet.append([date.strftime("%Y-%m-%d %H:%M"), ""])
+
         # Remueve la hoja del libro de trabajo
         workbook.remove(workbook['Sheet'])    
         # Guardar el archivo de Excel
@@ -152,7 +146,8 @@ def test_model(request):
                                'final' : timePredictions[-1],
                                'min'   : minDemand,
                                'max'   : maxDemand,
-                               'data'  : data    
+                               'data'  : data,
+                               'results': results
                     })
 
     return render(request, 'forecasting/test.html')

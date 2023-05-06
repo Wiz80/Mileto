@@ -14,7 +14,7 @@ function plotTestTimeSeries(data, min, max, inicio, final){
     var dataPlot = [trace2];
   
     var layout = {
-      title: {  text: 'Predicción de demanda de energía (MW)',
+      title: {  text: 'Pronóstico de demanda de energía (MW)',
               font: {
                 family: 'SF Pro Display',
                 weight: 'bold',

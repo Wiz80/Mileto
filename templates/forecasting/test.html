@@ -26,7 +26,7 @@
     <div class="test_page">
         <div class="row">
             <div class="col">
-                <h2>Obtener predicciones</h2>
+                <h2>Obtener pronósticos</h2>
                 <div class="predictions">
                     <form action="{% url 'predictions'%}" method = "POST">
                         {% csrf_token %}
@@ -144,6 +144,32 @@
         <div class="row resultados" id="results" style="display:none;">
             <h4>Resultados de entrenamiento</h4>
             <div id='plot'><!-- Plotly chart will be drawn inside this DIV --></div>
+            <div class="table-container text-center" style="max-height: 300px;">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="tg-c3ow" colspan="2">Pronóstico</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tg-baqh">Hora</td>
+                                <td class="tg-baqh">Demanda [MW]</td>
+                            </tr>
+                            <tr>
+                                {% for idx, demand in results.iterrows %}
+                            <tr>
+                                <td class="tg-bgtg">{{demand.time}}</td>
+                                <td class="tg-bgtg">{{demand.testPredictions}}</td>
+                            </tr>
+                            {% endfor %}
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         {% if data %}
         <script>

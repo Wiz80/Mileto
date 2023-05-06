@@ -24,7 +24,7 @@ function plotTimeSeries(data, min, max, inicio, final){
   var dataPlot = [trace1,trace2];
 
   var layout = {
-    title: {  text: 'Predicción y valor real de demanda de energía (MW)',
+    title: {  text: 'Pronóstico y valor real de demanda de energía (MW)',
             font: {
               family: 'SF Pro Display',
               weight: 'bold',

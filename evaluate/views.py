@@ -48,28 +48,40 @@ def evaluateModels(request):
         listModels = gCloud.listar_folder(idFolderModels)
 
         predictions = {modelName:[] for modelName in listModels}
+
+        deja = False
         for idx, modelName in enumerate(listModels):
             idModel = gCloud.busca(f"title = '{modelName}'")
             idMetadata = gCloud.busca(f"title = '{modelName[:-4]}.json'")
             model = gCloud.getModel(idModel)
             metadata = gCloud.getMetadata(idMetadata)
-            weatherData = Weather(startDate, endDate, latitude, longitud).get_weather_data(metadata['weather predictors'], True)
-            predictors = {
-                        'demand predictors': metadata['demand predictors'],
-                        'weather predictors': metadata['weather predictors'],
-                        'time predictors': metadata['time predictors']
-                     }
-            dataNormalized, dataNotNormalized = Train().get_data_to_train(weatherData, predictors, mc)
-            dataPredictors = dataNormalized.drop(columns=['Demand']) 
-            testPredictions = model.predict(dataPredictors)*max(dataNotNormalized['Demand'])
-
-            if idx == 0:
-                predictions['time'] = list(weatherData['time'])
-                predictions['realDemand'] = list(dataNotNormalized['Demand'])
                 
-            
-            predictions[modelName] = testPredictions
+            if str(metadata['MC']) == mc:   
+                weatherData = Weather(startDate, endDate, latitude, longitud).get_weather_data(metadata['weather predictors'], True)      
+                predictors = {
+                            'demand predictors': metadata['demand predictors'],
+                            'weather predictors': metadata['weather predictors'],
+                            'time predictors': metadata['time predictors']
+                        }
+                dataNormalized, dataNotNormalized = Train().get_data_to_train(weatherData, predictors, mc)
+                dataPredictors = dataNormalized.drop(columns=['Demand']) 
+                testPredictions = model.predict(dataPredictors)*max(dataNotNormalized['Demand'])
+                predictions[modelName] = testPredictions
+
+                if not deja:
+                    predictions['time'] = list(weatherData['time'])
+                    predictions['realDemand'] = list(dataNotNormalized['Demand'])
+                    deja = True
         
+        newList = []
+        for idx, key in enumerate(listModels):
+            if len(predictions[key]) == 0:
+                del predictions[key]
+            else:
+                newList.append(key)
+
+        listModels = newList
+
         ofi = demandModel[demandModel['Variable'] == 'OFI']
         ofi = getDemandDataFrame(ofi)
         predictions['OFI'] = list(ofi['demand'])
@@ -81,6 +93,7 @@ def evaluateModels(request):
         MAPEs['MC'] = round(MAPE(predictions['realDemand'], predictions['OFI']),4)
         
         desviaciones = {'model': [], 'MC': [], 'resolucion': []}
+        desviacionesNum = {'model': [], 'MC': [], 'resolucion': []}
 
         numOfMonths = relativedelta(endDate, startDate).months
 
@@ -89,18 +102,22 @@ def evaluateModels(request):
         ofipred = predictions['OFI']
         realDemand = predictions['realDemand']
 
-        print(numOfMonths)
         if numOfMonths > 0:
             for month in range(numOfMonths):
                 _, dias = calendar.monthrange(newDate.year, newDate.month)
                 for threshold, creg in zip([0.04, 0.05], ['CREG 100', 'CREG 025']):
-                    x1 = sum([np.abs(sum(modelpred[idx:idx+24]) - sum(realDemand[idx:idx+24])) for idx in range(0, len(realDemand), 24) if abs(sum(modelpred[idx:idx+24]) - sum(realDemand[idx:idx+24])) / sum(realDemand[idx:idx+24]) > threshold])
-                    x2 = sum([np.abs(sum(ofipred[idx:idx+24]) - sum(realDemand[idx:idx+24])) for idx in range(0, len(realDemand), 24) if abs(sum(ofipred[idx:idx+24]) - sum(realDemand[idx:idx+24])) / sum(realDemand[idx:idx+24]) > threshold])
-                    x3 = sum([np.abs(modelpred[idx]-realVal) for idx, realVal in enumerate(realDemand) if np.abs(modelpred[idx]-realVal)/realVal > threshold])
-                    x4 = sum([np.abs(ofipred[idx]-realVal) for idx, realVal in enumerate(realDemand) if np.abs(ofipred[idx]-realVal)/realVal > threshold]) 
-                    desviaciones['model'].append([round(x3, 4), round(x1, 4)])
-                    desviaciones['MC'].append([round(x4, 4), round(x2, 4)])
+                    x1 = [np.abs(sum(modelpred[idx:idx+24]) - sum(realDemand[idx:idx+24])) for idx in range(0, len(realDemand), 24) if abs(sum(modelpred[idx:idx+24]) - sum(realDemand[idx:idx+24])) / sum(realDemand[idx:idx+24]) > threshold]
+                    x2 = [np.abs(sum(ofipred[idx:idx+24]) - sum(realDemand[idx:idx+24])) for idx in range(0, len(realDemand), 24) if abs(sum(ofipred[idx:idx+24]) - sum(realDemand[idx:idx+24])) / sum(realDemand[idx:idx+24]) > threshold]
+                    x3 = [np.abs(modelpred[idx]-realVal) for idx, realVal in enumerate(realDemand) if np.abs(modelpred[idx]-realVal)/realVal > threshold]
+                    x4 = [np.abs(ofipred[idx]-realVal) for idx, realVal in enumerate(realDemand) if np.abs(ofipred[idx]-realVal)/realVal > threshold]
+
+                    desviaciones['model'].append([round(sum(x3), 4), round(sum(x1), 4)])
+                    desviaciones['MC'].append([round(sum(x4), 4), round(sum(x2), 4)])
                     desviaciones['resolucion'].append(f"{creg} {newDate.strftime('%B')}")
+
+                    desviacionesNum['model'].append([len(x3), len(x1)])
+                    desviacionesNum['MC'].append([len(x4), len(x2)])
+                    desviacionesNum['resolucion'].append(f"{creg} {newDate.strftime('%B')}")
             
                 newDate = newDate + timedelta(days=dias)
                 modelpred = modelpred[dias*24:]
@@ -108,22 +125,30 @@ def evaluateModels(request):
                 realDemand = realDemand[dias*24:]
         else:
             for threshold, creg in zip([0.04, 0.05], ['CREG 100', 'CREG 025']):
-                    x1 = sum([np.abs(sum(predictions['realDemand'][idx:idx+24]) - sum(predictions[bestModel][idx:idx+24])) for idx in range(0, len(predictions['realDemand']), 24) if abs(sum(predictions['realDemand'][idx:idx+24]) - sum(predictions[bestModel][idx:idx+24])) / sum(predictions['realDemand'][idx:idx+24]) > threshold])
-                    x2 = sum([np.abs(sum(predictions['OFI'][idx:idx+24]) - sum(predictions['realDemand'][idx:idx+24])) for idx in range(0, len(predictions['realDemand']), 24) if abs(sum(predictions['OFI'][idx:idx+24]) - sum(predictions['realDemand'][idx:idx+24])) / sum(predictions['realDemand'][idx:idx+24]) > threshold])
-                    x3 = sum([np.abs(predictions[bestModel][idx]-realVal) for idx, realVal in enumerate(predictions['realDemand']) if np.abs(predictions[bestModel][idx]-realVal)/realVal > threshold])
-                    x4 = sum([np.abs(predictions['OFI'][idx]-realVal) for idx, realVal in enumerate(predictions['realDemand']) if np.abs(predictions['OFI'][idx]-realVal)/realVal > threshold]) 
-                    desviaciones['model'].append([round(x3, 4), round(x1, 4)])
-                    desviaciones['MC'].append([round(x4, 4), round(x2, 4)])
-                    desviaciones['resolucion'].append(f"{creg} {startDate.strftime('%B')}")
+                    x1 = [np.abs(sum(predictions['realDemand'][idx:idx+24]) - sum(predictions[bestModel][idx:idx+24])) for idx in range(0, len(predictions['realDemand']), 24) if abs(sum(predictions['realDemand'][idx:idx+24]) - sum(predictions[bestModel][idx:idx+24])) / sum(predictions['realDemand'][idx:idx+24]) > threshold]
+                    x2 = [np.abs(sum(predictions['OFI'][idx:idx+24]) - sum(predictions['realDemand'][idx:idx+24])) for idx in range(0, len(predictions['realDemand']), 24) if abs(sum(predictions['OFI'][idx:idx+24]) - sum(predictions['realDemand'][idx:idx+24])) / sum(predictions['realDemand'][idx:idx+24]) > threshold]
+                    x3 = [np.abs(predictions[bestModel][idx]-realVal) for idx, realVal in enumerate(predictions['realDemand']) if np.abs(predictions[bestModel][idx]-realVal)/realVal > threshold]
+                    x4 = [np.abs(predictions['OFI'][idx]-realVal) for idx, realVal in enumerate(predictions['realDemand']) if np.abs(predictions['OFI'][idx]-realVal)/realVal > threshold]
+                    
+                    desviaciones['model'].append([round(sum(x3), 4), round(sum(x1), 4)])
+                    desviaciones['MC'].append([round(sum(x4), 4), round(sum(x2), 4)])
+                    desviaciones['resolucion'].append(f"{creg} {newDate.strftime('%B')}")
+                    
+                    desviacionesNum['model'].append([len(x3), len(x1)])
+                    desviacionesNum['MC'].append([len(x4), len(x2)])
+                    desviacionesNum['resolucion'].append(f"{creg} {newDate.strftime('%B')}")
             
-        print(desviaciones)
+
         desviaciones = pd.DataFrame(desviaciones)
+        desviacionesNum = pd.DataFrame(desviacionesNum)
+
         predictions = pd.DataFrame(predictions).to_json(orient='records')
     
         listModels.append('realDemand')
         listModels.append('OFI')
 
-        
+
+        MAPEs = {key: round(val*100, 3) for key, val in MAPEs.items()}
         return render(request, 'forecasting/evaluate.html',{
             'MCModel': UCPBef,
             'predictions': predictions,
@@ -134,6 +159,7 @@ def evaluateModels(request):
             'modelNames': listModels,
             'best': bestModel,
             'desviaciones': desviaciones,
+            'desviacionesNum': desviacionesNum,
             'MAPEs': MAPEs
         })
 

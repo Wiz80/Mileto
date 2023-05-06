@@ -33,12 +33,12 @@
     </div>
     <script type="text/javascript" src="{% static 'js/draw_evaluate_time_series.js' %}"></script>
     <script>
-        function call_results(){
+        function call_results() {
             const results_container = document.getElementById('results');
             results_container.style.display = 'block';
             var data = JSON.parse('{{ predictions|escapejs }}');
-            var names = {{ modelNames|safe }};
-            plotTimeSeries(data, names, '{{best}}','{{min}}', '{{max}}', '{{inicio}}', '{{final}}')
+            var names = {{ modelNames| safe}};
+        plotTimeSeries(data, names, '{{best}}', '{{min}}', '{{max}}', '{{inicio}}', '{{final}}')
         }
     </script>
     <div class="row w-100" id="results" style="display:none;">
@@ -49,23 +49,23 @@
             <div class="col">
                 <div class="table-container text-center" style="max-height: 300px;">
                     <div class="table-responsive">
-                      <table class="table">
-                        <thead>
-                            <tr>
-                                <th class="tg-c3ow" colspan="2">MAPE</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="tg-c3ow">Modelo de pronóstico</td>
-                            <td class="tg-c3ow">Error</td>
-                        </tr>
-                        {% for model, value in MAPEs.items %}
-                        <tr>
-                        <td class="tg-0lax">{{model}}</td>
-                        <td class="tg-0lax">{{value}}</td>
-                        </tr>
-                        {% endfor %}    
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="tg-c3ow" colspan="2">MAPE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="tg-c3ow">Modelo de pronóstico</td>
+                                    <td class="tg-c3ow">Error %</td>
+                                </tr>
+                                {% for model, value in MAPEs.items %}
+                                <tr>
+                                    <td class="tg-0lax">{{model}}</td>
+                                    <td class="tg-0lax">{{value}}</td>
+                                </tr>
+                                {% endfor %}
                         </table>
                     </div>
                 </div>
@@ -73,43 +73,75 @@
             <div class="col">
                 <div class="table-container text-center" style="max-height: 300px;">
                     <div class="table-responsive">
-                      <table class="table">
-                        <thead>
-                            <tr>
-                                <th class="tg-c3ow" colspan="5">Desviaciones [MW]</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="tg-baqh">Resolución</td>
-                            <td class="tg-baqh">modelo {{best}} (horario)</td>
-                            <td class="tg-baqh">modelo {{best}} (diario)</td>
-                            <td class="tg-baqh">MC (horario)</td>
-                            <td class="tg-baqh">MC (diario)</td>
-                        </tr>
-                        <tr>
-                            {% for idx, desviacion in desviaciones.iterrows %}
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                <td class="tg-bgtg">{{desviacion.resolucion}}</td>
-                                <td class="tg-bgtg">{{desviacion.model.0}}</td>
-                                <td class="tg-bgtg">{{desviacion.model.1}}</td>
-                                <td class="tg-bgtg">{{desviacion.MC.0}}</td>
-                                <td class="tg-bgtg">{{desviacion.MC.1}}</td>
+                                    <th class="tg-c3ow" colspan="5">Desviaciones [MW]</th>
                                 </tr>
-                            {% endfor %}
-                        </tr>
-                            
-                        </tbody>
-                      </table>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="tg-baqh">Resolución</td>
+                                    <td class="tg-baqh">modelo {{best}} (horario)</td>
+                                    <td class="tg-baqh">MC (horario)</td>
+                                    <td class="tg-baqh">modelo {{best}} (diario)</td>
+                                    <td class="tg-baqh">MC (diario)</td>
+                                </tr>
+                                <tr>
+                                    {% for idx, desviacion in desviaciones.iterrows %}
+                                <tr>
+                                    <td class="tg-bgtg">{{desviacion.resolucion}}</td>
+                                    <td class="tg-bgtg">{{desviacion.model.0}}</td>
+                                    <td class="tg-bgtg">{{desviacion.MC.0}}</td>
+                                    <td class="tg-bgtg">{{desviacion.model.1}}</td>
+                                    <td class="tg-bgtg">{{desviacion.MC.1}}</td>
+                                </tr>
+                                {% endfor %}
+                                </tr>
+
+                            </tbody>
+                        </table>
                     </div>
-                  </div>
+                </div>
+                <div class="table-container text-center" style="max-height: 300px;">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="tg-c3ow" colspan="5">Número de desviaciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="tg-baqh">Resolución</td>
+                                    <td class="tg-baqh">modelo {{best}} (horario)</td>
+                                    <td class="tg-baqh">MC (horario)</td>
+                                    <td class="tg-baqh">modelo {{best}} (diario)</td>
+                                    <td class="tg-baqh">MC (diario)</td>
+                                </tr>
+                                <tr>
+                                    {% for idx, desviacion in desviacionesNum.iterrows %}
+                                <tr>
+                                    <td class="tg-bgtg">{{desviacion.resolucion}}</td>
+                                    <td class="tg-bgtg">{{desviacion.model.0}}</td>
+                                    <td class="tg-bgtg">{{desviacion.MC.0}}</td>
+                                    <td class="tg-bgtg">{{desviacion.model.1}}</td>
+                                    <td class="tg-bgtg">{{desviacion.MC.1}}</td>
+                                </tr>
+                                {% endfor %}
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     {% if predictions %}
-        <script>
-            call_results()
-        </script>
+    <script>
+        call_results()
+    </script>
     {% endif %}
 </div>
 {% endblock %}

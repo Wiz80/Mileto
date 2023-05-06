@@ -1,4 +1,5 @@
 body{
+    zoom: 1.25;
     font-family: var(--f1);
     color: var(--bl2);
     font-size: 14px;
