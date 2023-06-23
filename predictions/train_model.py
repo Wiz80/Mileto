@@ -9,6 +9,9 @@ from datetime import datetime
 from sklearn.svm import SVR
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
+from sklearn.utils.fixes import loguniform
+from sklearn.model_selection import RandomizedSearchCV
+
 #Predictors
 from predictions.models import Demand_Data
 from predictions.get_predictors import Day_predictors, Demand_predictors
@@ -78,23 +81,47 @@ class Train:
         return Train_predictors, Train_target, Test_predictors, Test_target
 
 
-    def training_SVR(self, Train_predictors, Train_target, C, epsilon, gamma, Test_predictors, Test_target):
+    def training_SVR(self, Train_predictors, Train_target, C, C2, epsilon, gamma, gamma2, Test_predictors, Test_target):
 
         #SVR
-        SVR_forecast_model = SVR(C=C, epsilon=epsilon, gamma=gamma)
-        SVR_forecast_model.fit(Train_predictors, Train_target)
+        #  Modo RandomizedSearchCV --------------------------------------------------
+        model = SVR()
+
+        best_parameters     = []
+        best_scores         = []
+        grid_param_svc = {'C':loguniform(C,C2), 'gamma': loguniform(gamma, gamma2),'epsilon':[epsilon]} #Search on grid
+        pipe_svc = SVR(kernel="rbf")   # Let's specify the grid parameters (implements cross-validation)
+        high_machine = RandomizedSearchCV(estimator=pipe_svc, param_distributions=grid_param_svc,scoring= 'neg_mean_absolute_percentage_error' ,refit=True,verbose=2,n_jobs=-1,n_iter=10)
+        
+        print(Train_predictors)
+        print(Train_target)
+        
+        high_machine.fit(Train_predictors, Train_target.ravel())#Y_train.ravel())             # We fit the estimator
+        
+        best_parameters.append(high_machine.best_params_)
+        best_scores.append(high_machine.best_score_)
+    
+        #print(best_parameters)                                  
+        #print(best_scores)
+        SVR_forecast_model = high_machine.best_estimator_
 
         Score = SVR_forecast_model.score(Test_predictors, Test_target)
         Target_predictions = SVR_forecast_model.predict(Test_predictors)
 
+        best_params = high_machine.best_params_
+        C = best_params['C']   
+        gamma = best_params['gamma']
+        
         Mape = MAPE(Test_target, Target_predictions)
         Mae = MAE(Test_target, Target_predictions)
         Mse = MSE(Test_target, Target_predictions)
 
-        return SVR_forecast_model, Target_predictions, Score, Mape, Mae, Mse
 
 
-    def build_SVR(self, Weather_data_train, Weather_data_test, predictors, MC, kernel, C, epsilon, gamma):
+        return SVR_forecast_model, Target_predictions, Score, Mape, Mae, Mse, C, gamma
+
+
+    def build_SVR(self, Weather_data_train, Weather_data_test, predictors, MC, kernel, C, C2, epsilon, gamma, gamma2):
         
         Weather_data = pd.concat([Weather_data_train, Weather_data_test], ignore_index=True)
 
@@ -103,9 +130,9 @@ class Train:
         
         trainPredictors, trainRealValues, testPredictors, testRealValues = self.data_preparation(Data_model_train, Weather_data, Weather_data_train, Weather_data_test)
         #training_SVR(self, Train_predictors, Train_target, C, epsilon, gamma, Test_predictors, #Test_target)
-        SVRModel, testPredictions, Score, Mape, Mae, Mse = self.training_SVR(trainPredictors, trainRealValues, C, epsilon, gamma, testPredictors, testRealValues)
+        SVRModel, testPredictions, Score, Mape, Mae, Mse, C, gamma = self.training_SVR(trainPredictors, trainRealValues, C, C2, epsilon, gamma, gamma2, testPredictors, testRealValues)
           
         
-        return SVRModel, testPredictions, Score, Mape, Mae, Mse, Data_model, testRealValues
+        return SVRModel, testPredictions, Score, Mape, Mae, Mse, Data_model, testRealValues, C, gamma
 
     

@@ -10,7 +10,7 @@ import numpy as np
 from datetime import datetime, timedelta
 import calendar
 from dateutil.relativedelta import relativedelta
-
+from predictions.desviaciones import Desviaciones
 
 def getDemandDataFrame(data):
     demandArray = {'hour': [], 'date':[], 'demand': []}
@@ -41,12 +41,15 @@ def evaluateModels(request):
 
         demandModel = demandModel[demandModel['UCP'] == mc]
         demandModel = demandModel[(demandModel['Fecha'] >= startDate) & (demandModel['Fecha'] <= endDate)]
-        
+
+        ofi = demandModel[demandModel['Variable'] == 'OFI']
+        ofi = getDemandDataFrame(ofi)
+        predof = np.array(ofi['demand'])
+
         #importar los modelos
         gCloud = Google_Cloud_Drive()
         idFolderModels = "17BskLL0bgyjnsTTsXv6OkuXASzyylej7"
         listModels = gCloud.listar_folder(idFolderModels)
-
         predictions = {modelName:[] for modelName in listModels}
 
         deja = False
@@ -65,9 +68,9 @@ def evaluateModels(request):
                         }
                 dataNormalized, dataNotNormalized = Train().get_data_to_train(weatherData, predictors, mc)
                 dataPredictors = dataNormalized.drop(columns=['Demand']) 
-                testPredictions = model.predict(dataPredictors)*max(dataNotNormalized['Demand'])
-                predictions[modelName] = testPredictions
-
+                testPredictions = model.predict(dataPredictors)
+                predictions[modelName] = testPredictions*(max(dataNotNormalized['Demand']))
+                
                 if not deja:
                     predictions['time'] = list(weatherData['time'])
                     predictions['realDemand'] = list(dataNotNormalized['Demand'])
@@ -82,65 +85,18 @@ def evaluateModels(request):
 
         listModels = newList
 
-        ofi = demandModel[demandModel['Variable'] == 'OFI']
-        ofi = getDemandDataFrame(ofi)
-        predictions['OFI'] = list(ofi['demand'])
+        
+        predictions['OFI'] = predof #(predof/max(predof))*max(dataNotNormalized['Demand'])
         
         #Obtener el modelo con mejor MAPE
         MAPEs = {name: round(MAPE(predictions['realDemand'], predictions[name]),4) for name in listModels} 
         _, idxMinMAPE = min(enumerate(MAPEs.values()), key=lambda x: x[1])
         bestModel = listModels[int(idxMinMAPE)]
         MAPEs['MC'] = round(MAPE(predictions['realDemand'], predictions['OFI']),4)
-        
-        desviaciones = {'model': [], 'MC': [], 'resolucion': []}
-        desviacionesNum = {'model': [], 'MC': [], 'resolucion': []}
 
-        numOfMonths = relativedelta(endDate, startDate).months
-
-        newDate = startDate
         modelpred = predictions[bestModel]
-        ofipred = predictions['OFI']
         realDemand = predictions['realDemand']
-
-        if numOfMonths > 0:
-            for month in range(numOfMonths):
-                _, dias = calendar.monthrange(newDate.year, newDate.month)
-                for threshold, creg in zip([0.04, 0.05], ['CREG 100', 'CREG 025']):
-                    x1 = [np.abs(sum(modelpred[idx:idx+24]) - sum(realDemand[idx:idx+24])) for idx in range(0, len(realDemand), 24) if abs(sum(modelpred[idx:idx+24]) - sum(realDemand[idx:idx+24])) / sum(realDemand[idx:idx+24]) > threshold]
-                    x2 = [np.abs(sum(ofipred[idx:idx+24]) - sum(realDemand[idx:idx+24])) for idx in range(0, len(realDemand), 24) if abs(sum(ofipred[idx:idx+24]) - sum(realDemand[idx:idx+24])) / sum(realDemand[idx:idx+24]) > threshold]
-                    x3 = [np.abs(modelpred[idx]-realVal) for idx, realVal in enumerate(realDemand) if np.abs(modelpred[idx]-realVal)/realVal > threshold]
-                    x4 = [np.abs(ofipred[idx]-realVal) for idx, realVal in enumerate(realDemand) if np.abs(ofipred[idx]-realVal)/realVal > threshold]
-
-                    desviaciones['model'].append([round(sum(x3), 4), round(sum(x1), 4)])
-                    desviaciones['MC'].append([round(sum(x4), 4), round(sum(x2), 4)])
-                    desviaciones['resolucion'].append(f"{creg} {newDate.strftime('%B')}")
-
-                    desviacionesNum['model'].append([len(x3), len(x1)])
-                    desviacionesNum['MC'].append([len(x4), len(x2)])
-                    desviacionesNum['resolucion'].append(f"{creg} {newDate.strftime('%B')}")
-            
-                newDate = newDate + timedelta(days=dias)
-                modelpred = modelpred[dias*24:]
-                ofipred = ofipred[dias*24:]
-                realDemand = realDemand[dias*24:]
-        else:
-            for threshold, creg in zip([0.04, 0.05], ['CREG 100', 'CREG 025']):
-                    x1 = [np.abs(sum(predictions['realDemand'][idx:idx+24]) - sum(predictions[bestModel][idx:idx+24])) for idx in range(0, len(predictions['realDemand']), 24) if abs(sum(predictions['realDemand'][idx:idx+24]) - sum(predictions[bestModel][idx:idx+24])) / sum(predictions['realDemand'][idx:idx+24]) > threshold]
-                    x2 = [np.abs(sum(predictions['OFI'][idx:idx+24]) - sum(predictions['realDemand'][idx:idx+24])) for idx in range(0, len(predictions['realDemand']), 24) if abs(sum(predictions['OFI'][idx:idx+24]) - sum(predictions['realDemand'][idx:idx+24])) / sum(predictions['realDemand'][idx:idx+24]) > threshold]
-                    x3 = [np.abs(predictions[bestModel][idx]-realVal) for idx, realVal in enumerate(predictions['realDemand']) if np.abs(predictions[bestModel][idx]-realVal)/realVal > threshold]
-                    x4 = [np.abs(predictions['OFI'][idx]-realVal) for idx, realVal in enumerate(predictions['realDemand']) if np.abs(predictions['OFI'][idx]-realVal)/realVal > threshold]
-                    
-                    desviaciones['model'].append([round(sum(x3), 4), round(sum(x1), 4)])
-                    desviaciones['MC'].append([round(sum(x4), 4), round(sum(x2), 4)])
-                    desviaciones['resolucion'].append(f"{creg} {newDate.strftime('%B')}")
-                    
-                    desviacionesNum['model'].append([len(x3), len(x1)])
-                    desviacionesNum['MC'].append([len(x4), len(x2)])
-                    desviacionesNum['resolucion'].append(f"{creg} {newDate.strftime('%B')}")
-            
-
-        desviaciones = pd.DataFrame(desviaciones)
-        desviacionesNum = pd.DataFrame(desviacionesNum)
+        desviaciones, desviacionesNum = Desviaciones.calcDesviaciones(startDate, endDate, realDemand, modelpred, predof)
 
         predictions = pd.DataFrame(predictions).to_json(orient='records')
     

@@ -17,6 +17,7 @@ from predictions.test_model import Test
 from predictions.models import Demand_Data
 from predictions.Google_Cloud import *
 from predictions.Google_Cloud.googleCloudInstance import Google_Cloud_Drive
+from predictions.desviaciones import Desviaciones
 
 weatherVarList = [
     "temperature_2m",
@@ -152,6 +153,22 @@ def test_model(request):
 
     return render(request, 'forecasting/test.html')
 
+def getDemandDataFrame(data):
+    demandArray = {'hour': [], 'date':[], 'demand': []}
+    hour = [f'{i}:00' for i in range(0, 24)]
+    for _, dat in data.iterrows():
+        demandInDate = [float(dat[i]) for i in [f'P{i}' for i in range(1,25)]]
+        date = [dat['Fecha'] for _ in range(0, 24)]
+        demandArray['hour'].append(hour)
+        demandArray['demand'].append(demandInDate)
+        demandArray['date'].append(date)
+
+    for key in demandArray:
+        demandArray[key] = np.array(demandArray[key]).reshape(-1)
+    
+    return pd.DataFrame(demandArray)
+
+
 @user_passes_test(lambda u: u.is_superuser)
 def train_model(request):
     #Entradas del modelo
@@ -185,7 +202,9 @@ def train_model(request):
         kernel = request.POST['kernel']
         epsilon = float(request.POST['eps'])
         gamma = float(request.POST['gam'])
-        C = int(request.POST['C'])
+        gamma2 = float(request.POST['gamma2'])
+        C = float(request.POST['C'])
+        C2 = float(request.POST['C2'])
 
 
         predictors = {
@@ -215,12 +234,27 @@ def train_model(request):
             #Entrenar modelo SVR
             train_model = Train()
 
-            SVRModel, testPredictions, Score, Mape, Mae, Mse, Data_model, testRealValues = train_model.build_SVR(Weather_data_train,Weather_data_test, predictors, MC, kernel, C, epsilon, gamma)
-            
+            SVRModel, testPredictions, Score, Mape, Mae, Mse, Data_model, testRealValues, C, gamma = train_model.build_SVR(Weather_data_train,Weather_data_test, predictors, MC, kernel, C, C2, epsilon, gamma, gamma2)
+            #data_raw = Demand_Data.objects.filter(UCP=MC, Variable="OFI")
+            #ofiPred = pd.DataFrame.from_records(data_raw.values())
+            #ofiPred = getDemandDataFrame(ofiPred)
+            #mcOfiPred = np.array(ofiPred['demand'])
+
             #Demanda predecida no normalizada
             testPredictions = testPredictions*max(Data_model['Demand'])
             testRealValues = testRealValues*max(Data_model['Demand'])
+
+            dataMC = Demand_Data.objects.all()
+            dataMC = pd.DataFrame(list(dataMC.values()))
+
+            dataMC = dataMC[dataMC['UCP'] == MC]
+            dataMC = dataMC[(dataMC['Fecha'] >= start_test_date) & (dataMC['Fecha'] <= end_test_date)]
+
+            ofiPred = getDemandDataFrame(dataMC[dataMC['Variable'] == 'OFI'])
+            ofiPred = np.array(ofiPred['demand'])
             
+            desviaciones, desviacionesNum = Desviaciones.calcDesviaciones(start_train_date, end_train_date, testRealValues, testPredictions, ofiPred)
+
             results = {'time': np.array(Weather_data_test['time']),
                        'testRealValues': np.array(testRealValues),
                        'testPredictions': np.array(testPredictions)}
@@ -276,8 +310,9 @@ def train_model(request):
                            'min'   : min(Data_model['Demand']),
                            'max'   : max(Data_model['Demand']),
                            'fileName': modelName,
-                           'MCModel': UCPBef
-
+                           'MCModel': UCPBef,
+                           'desviaciones': desviaciones,
+                           'desviacionesNum': desviacionesNum
                            })
 
         elif model == 'ANN':
